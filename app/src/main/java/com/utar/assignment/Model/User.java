@@ -7,8 +7,17 @@ public class User {
     private String email;
     private String username;
     private List<String> groupList;
+    private List<Amount> amountList;
 
     public User() {
+    }
+
+    public List<Amount> getAmountList() {
+        return amountList;
+    }
+
+    public void setAmountList(List<Amount> amountList) {
+        this.amountList = amountList;
     }
 
     public String getUid() {

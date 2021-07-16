@@ -1,14 +1,24 @@
 package com.utar.assignment.Model;
 
 import java.util.Date;
+import java.util.List;
 
 public class MainActivity {
     private String Id;
     private String name;
     private double billAmount;
     private Date createdDate;
+    private List<SubActivity> subActivityList;
 
     public MainActivity() {
+    }
+
+    public List<SubActivity> getSubActivityList() {
+        return subActivityList;
+    }
+
+    public void setSubActivityList(List<SubActivity> subActivityList) {
+        this.subActivityList = subActivityList;
     }
 
     public String getId() {
