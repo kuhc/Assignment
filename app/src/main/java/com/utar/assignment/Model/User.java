@@ -1,6 +1,7 @@
 package com.utar.assignment.Model;
 
 import java.util.List;
+import java.util.UUID;
 
 public class User {
     private String Uid;
@@ -10,6 +11,7 @@ public class User {
     private List<Amount> amountList;
 
     public User() {
+        this.Uid = UUID.randomUUID().toString();
     }
 
     public List<Amount> getAmountList() {
