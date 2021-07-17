@@ -43,9 +43,16 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
 
+
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
 
             return true;
         }
     };
+
+        //jasmond here
+        //jasmond testing 1
+
+        //bq testing
+    }
 }
