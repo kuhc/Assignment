@@ -14,6 +14,11 @@ public class User {
         this.Uid = UUID.randomUUID().toString();
     }
 
+    public User(String Uid, String username) {
+        this.Uid = Uid;
+        this.username = username;
+    }
+
     public List<Amount> getAmountList() {
         return amountList;
     }
