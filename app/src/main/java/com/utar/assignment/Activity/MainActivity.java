@@ -6,16 +6,21 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.utar.assignment.Fragment.FriendFragment;
+import com.utar.assignment.Fragment.GroupFragment;
 import com.utar.assignment.Fragment.HomeFragment;
 import com.utar.assignment.Model.User;
 import com.utar.assignment.R;
+import com.utar.assignment.Util.GeneralHelper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNav = findViewById(R.id.bottom_nav);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -41,8 +47,13 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.nav_home:
                     selectedFragment = new HomeFragment();
                     break;
+                case R.id.nav_group:
+                    selectedFragment = new GroupFragment();
+                    break;
+                case R.id.nav_friend:
+                    selectedFragment = new FriendFragment();
+                    break;
             }
-
 
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
 
@@ -50,9 +61,4 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-        //jasmond here
-        //jasmond testing 1
-
-        //bq testing
-    }
 }
