@@ -1,14 +1,30 @@
 package com.utar.assignment.Model;
 
 import java.util.List;
+import java.util.UUID;
 
 public class User {
     private String Uid;
     private String email;
     private String username;
     private List<String> groupList;
+    private List<Amount> amountList;
 
     public User() {
+        this.Uid = UUID.randomUUID().toString();
+    }
+
+    public User(String Uid, String username) {
+        this.Uid = Uid;
+        this.username = username;
+    }
+
+    public List<Amount> getAmountList() {
+        return amountList;
+    }
+
+    public void setAmountList(List<Amount> amountList) {
+        this.amountList = amountList;
     }
 
     public String getUid() {
