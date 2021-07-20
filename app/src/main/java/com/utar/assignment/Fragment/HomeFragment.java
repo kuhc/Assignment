@@ -1,5 +1,6 @@
 package com.utar.assignment.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.utar.assignment.Activity.AddExpenses;
 import com.utar.assignment.R;
 import com.utar.assignment.Util.GeneralHelper;
 
@@ -25,7 +27,10 @@ public class HomeFragment  extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                GeneralHelper.showMessage(getActivity(),"add expenses");
+                //GeneralHelper.showMessage(getActivity(),"add expenses");
+                Intent intent = new Intent(getActivity(), AddExpenses.class);
+                startActivity(intent);
+
             }
         });
 
