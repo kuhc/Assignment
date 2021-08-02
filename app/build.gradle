@@ -43,4 +43,10 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    // Picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+    // Circle Image View
+    implementation 'de.hdodenhof:circleimageview:2.1.0'
 }
