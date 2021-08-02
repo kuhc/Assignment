@@ -114,7 +114,7 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()) {
                             String userId = fAuth.getCurrentUser().getUid();
-                            User user = new User(userId, name);
+                            User user = new User(userId, name, email);
 
                             FirestoreHelper.setUser(user, new FirebaseCallback() {
                                 @Override

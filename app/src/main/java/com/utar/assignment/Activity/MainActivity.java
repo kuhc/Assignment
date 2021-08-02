@@ -18,6 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.utar.assignment.Fragment.FriendFragment;
 import com.utar.assignment.Fragment.GroupFragment;
 import com.utar.assignment.Fragment.HomeFragment;
+import com.utar.assignment.Fragment.ProfileFragment;
 import com.utar.assignment.Model.User;
 import com.utar.assignment.R;
 import com.utar.assignment.Util.GeneralHelper;
@@ -53,6 +54,10 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.nav_friend:
                     selectedFragment = new FriendFragment();
                     break;
+                    case R.id.nav_profile:
+                selectedFragment = new ProfileFragment();
+                break;
+
             }
 
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();

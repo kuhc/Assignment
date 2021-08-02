@@ -14,9 +14,10 @@ public class User {
         this.Uid = UUID.randomUUID().toString();
     }
 
-    public User(String Uid, String username) {
+    public User(String Uid, String username, String email) {
         this.Uid = Uid;
         this.username = username;
+        this.email = email;
     }
 
     public List<Amount> getAmountList() {
