@@ -46,9 +46,25 @@
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="349dp"
         android:layout_height="630dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.451"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/friend_number" />
+
+    <Button
+        android:id="@+id/add_friend"
+        android:layout_width="155dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/black"
+        android:text="Add Friends"
+        android:textSize="13dp"
+        app:layout_constraintBottom_toTopOf="@+id/friend_number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.447"
+        app:layout_constraintStart_toEndOf="@+id/friend_frag_uname"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
