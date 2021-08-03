@@ -175,12 +175,13 @@ public class ProfileFragment extends Fragment {
                 txtName.setText(user.getUsername());
                 txtEmail.setText(user.getEmail());
 
+                loadingPage.setVisibility(View.INVISIBLE);
+
                 // Load Profile Picture
                 StorageHelper.getProfilePictureUri(fUser.getUid(), new FirebaseCallback() {
                     @Override
                     public void onResponse(Uri uri) {
                         Picasso.get().load(uri).into(imgProfile);
-                        loadingPage.setVisibility(View.INVISIBLE);
                     }
                 });
             }
