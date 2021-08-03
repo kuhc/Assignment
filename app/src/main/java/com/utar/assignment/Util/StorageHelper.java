@@ -42,7 +42,7 @@ public class StorageHelper {
     }
 
     public static void uploadImageByData(String child, byte[] data, FirebaseCallback callback) {
-        StorageReference ref = storageReference.child(child).child(new Date().toString());
+        StorageReference ref = storageReference.child(child);
         ref.putBytes(data).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
