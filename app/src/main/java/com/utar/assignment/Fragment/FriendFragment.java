@@ -1,5 +1,6 @@
 package com.utar.assignment.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 
@@ -17,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.utar.assignment.Activity.AddFriend;
 import com.utar.assignment.Model.User;
 import com.utar.assignment.R;
 import com.utar.assignment.Util.FirebaseCallback;
@@ -52,6 +55,15 @@ public class FriendFragment extends Fragment {
                         username.setText(um);
                     }
                 });
+
+        Button button = view.findViewById(R.id.add_friend);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AddFriend.class);
+                startActivity(intent);
+            }
+        });
 
        return view;
     }
