@@ -6,6 +6,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.utar.assignment.Model.Friend;
 import com.utar.assignment.Model.Group;
 import com.utar.assignment.Model.User;
 
@@ -51,6 +52,17 @@ public class FirestoreHelper {
     // Set Group
     public static void setGroup(Group group, FirebaseCallback callback) {
         fStore.collection("Groups").document(group.getId()).set(group)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        callback.onResponse();
+                    }
+                });
+    }
+
+    //Add friend
+    public static void addFriend(Friend friend, FirebaseCallback callback) {
+        fStore.collection("UsersFriend").document(friend.getId()).set(friend)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
