@@ -9,6 +9,7 @@ public class User {
     private String username;
     private List<String> groupList;
     private List<Amount> amountList;
+    private List<String> friendList;
 
     public User() {
         this.Uid = UUID.randomUUID().toString();
@@ -58,5 +59,13 @@ public class User {
 
     public void setGroupList(List<String> groupList) {
         this.groupList = groupList;
+    }
+
+    public List<String> getFriendList() {
+        return friendList;
+    }
+
+    public void setFriendList(List<String> friendList) {
+        this.friendList = friendList;
     }
 }
