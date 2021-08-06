@@ -52,7 +52,9 @@ public class AddFriend extends AppCompatActivity {
                 User userInfo;
                 userInfo = (User)object;
                 List<String> existingFriend = userInfo.getFriendList();
-                emailList.addAll(existingFriend);
+                if(existingFriend != null) {
+                    emailList.addAll(existingFriend);
+                }
             }
         });
 
