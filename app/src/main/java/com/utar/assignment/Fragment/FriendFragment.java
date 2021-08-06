@@ -99,12 +99,16 @@ public class FriendFragment extends Fragment {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 userInfo = documentSnapshot.toObject(User.class);
-                userList.addAll(userInfo.getFriendList());
-                int fNo = userList.size();
-                String fNo1 = Integer.toString(fNo);
-                friendNo.setText(fNo1);
+                if(userInfo.getFriendList()!= null) {
+                    userList.addAll(userInfo.getFriendList());
+                    int fNo = userList.size();
+                    String fNo1 = Integer.toString(fNo);
+                    friendNo.setText(fNo1);
 
-                initializeListView (userInfo,userList);
+                    initializeListView(userInfo, userList);
+                }
+                else
+                    GeneralHelper.showMessage(getContext(),"There is no existing friend!");
                 //initializeRecycleView(userList);
             }
         });
