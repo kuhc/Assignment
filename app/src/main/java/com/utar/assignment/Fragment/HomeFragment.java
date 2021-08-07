@@ -23,17 +23,13 @@ public class HomeFragment  extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        SplitCalHelper sh = new SplitCalHelper();
-        double result = sh.splitNormal(5,5000);
+
 
         FloatingActionButton fab = view.findViewById(R.id.btnAddPost);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //GeneralHelper.showMessage(getActivity(),"add expenses");
-
-                GeneralHelper.showMessage(getActivity(),"answer test is " +result);
 
                 Intent intent = new Intent(getActivity(), AddExpenses.class);
                 startActivity(intent);

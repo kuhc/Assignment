@@ -1,61 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".Activity.AddExpenses">
 
     <TextView
-        android:id="@+id/textView10"
+        android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Group"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.104"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.823" />
-
-    <ToggleButton
-        android:id="@+id/toggleButton2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Equaly"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.77"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.742" />
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:layout_margin="50px"
+        android:fontFamily="sans-serif-smallcaps"
+        android:foregroundGravity="center_vertical"
+        android:gravity="center_vertical"
+        android:text="Add Expenses"
+        android:textColor="@color/black"
+        android:textSize="50sp" />
 
     <TextView
-        android:id="@+id/textView8"
-        android:layout_width="wrap_content"
+        android:id="@+id/add_result"
+        android:layout_width="291dp"
         android:layout_height="wrap_content"
-        android:text="Split In"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.157"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.685" />
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:textColor="#000000"
+        android:textSize="24sp" />
 
-    <TextView
-        android:id="@+id/textView9"
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/add_chipGroup"
+        android:layout_width="376dp"
+        android:layout_height="84dp"
+        android:layout_gravity="center_horizontal"
+        app:singleLine="false">
+
+    </com.google.android.material.chip.ChipGroup>
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pay By"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.674"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.685" />
+        android:layout_margin="50px"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/add_usershare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/custom_container"
+            android:ems="10"
+            android:hint="User Share"
+            android:inputType="textMultiLine|textImeMultiLine"
+            android:padding="20dp"
+            android:scrollbars="vertical" />
+
+        <Button
+            android:id="@+id/add_adduser"
+            android:layout_width="151dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:onClick="add_user_chip"
+            android:text="User"
+            app:icon="@drawable/ic_add" />
+    </LinearLayout>
 
     <EditText
-        android:id="@+id/login_txtEmail5"
+        android:id="@+id/add_amount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -67,106 +83,47 @@
         android:hint="Amount"
         android:inputType="number|text|numberDecimal|textEmailAddress"
         android:numeric="integer"
-        android:padding="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.517" />
+        android:padding="20dp" />
 
     <EditText
-        android:id="@+id/login_txtEmail4"
+        android:id="@+id/add_expensesname"
         android:layout_width="311dp"
         android:layout_height="65dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="50px"
         android:background="@drawable/custom_container"
         android:ems="10"
         android:hint="Expenses Name"
         android:inputType="textEmailAddress"
-        android:padding="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.279" />
-
-    <EditText
-        android:id="@+id/add_usershare"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:background="@drawable/custom_container"
-        android:drawableEnd="@drawable/ic_add"
-        android:ems="10"
-        android:hint="User Share"
-        android:inputType="textEmailAddress"
-        android:padding="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.2" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-smallcaps"
-        android:text="Add Expenses"
-        android:textColor="@color/black"
-        android:textSize="50sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023" />
-
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="65dp"
-        android:layout_height="63dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.057"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.363"
-        app:srcCompat="@drawable/ic_add" />
-
-    <ToggleButton
-        android:id="@+id/toggleButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Equaly"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.179"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.742" />
+        android:padding="20dp" />
 
     <Spinner
         android:id="@+id/spinner2"
         android:layout_width="332dp"
         android:layout_height="55dp"
+        android:layout_gravity="center_horizontal"
         android:background="@drawable/custom_container"
         android:scrollbarAlwaysDrawVerticalTrack="false"
-        android:spinnerMode="dropdown"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.493"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.894" />
+        android:spinnerMode="dropdown" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@android:string/cancel" />
+
+        <Button
+            android:id="@+id/add_split"
+            android:layout_width="206dp"
+            android:layout_height="wrap_content"
+            android:text="Split Up" />
+    </LinearLayout>
+
+
+</LinearLayout>
