@@ -1,2 +1,3 @@
+include ':nachos'
 include ':app'
 rootProject.name = "Assignment"
