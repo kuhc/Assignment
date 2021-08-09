@@ -1,16 +1,13 @@
 package com.utar.assignment.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -44,6 +41,7 @@ public class AddFriend extends AppCompatActivity {
         List<String> emailList = new ArrayList<>();
         FirebaseUser user;
         user = fAuth.getInstance().getCurrentUser();
+        String oriUserEmail = user.getEmail();
         String uid = user.getUid();
 
         FirestoreHelper.getUser(uid, new FirebaseCallback() {
@@ -71,12 +69,16 @@ public class AddFriend extends AppCompatActivity {
                             if (task.getResult().getSignInMethods().size() == 0) {
                                 GeneralHelper.showMessage(AddFriend.this, "The email does not exist");
                                 userEmail.getText().clear();
-                            } else {
-                                //GeneralHelper.showMessage(AddFriend.this, "The email does exist");
+                            }
+                            else if (emailList.contains(email))
+                            {
+                                GeneralHelper.showMessage(AddFriend.this, "The email is already in the friends list!");
+                                userEmail.getText().clear();
+                            }
 
-                                if (emailList.contains(email))
+                            else if(email.equals(oriUserEmail))
                                 {
-                                    GeneralHelper.showMessage(AddFriend.this, "The email is already in the friends list!");
+                                    GeneralHelper.showMessage(AddFriend.this, "You cannot type in your email!");
                                     userEmail.getText().clear();
                                 }
                                 else {
@@ -92,13 +94,8 @@ public class AddFriend extends AppCompatActivity {
                                         }
                                     });
                                     userEmail.getText().clear();
-                                /*Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.friendList);
-                                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                                fragmentTransaction.detach(fragment).commit();
-                                fragmentTransaction.attach(fragment).commit();*/
                                 }
                             }
-                        }
                     });
                 }
                 else
