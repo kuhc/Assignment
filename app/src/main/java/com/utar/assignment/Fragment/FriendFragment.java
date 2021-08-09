@@ -1,19 +1,23 @@
 package com.utar.assignment.Fragment;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.mbms.MbmsErrors;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,8 +29,11 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.utar.assignment.Activity.AddFriend;
+import com.utar.assignment.Activity.MainActivity;
 import com.utar.assignment.Model.User;
 import com.utar.assignment.R;
+import com.utar.assignment.Util.FirebaseCallback;
+import com.utar.assignment.Util.FirestoreHelper;
 import com.utar.assignment.Util.GeneralHelper;
 
 import java.util.ArrayList;
@@ -117,6 +124,11 @@ public class FriendFragment extends Fragment {
     }
 
     public void initializeListView(User userInfo, List<String> userList) {
+
+        FirebaseUser user;
+        user = Auth.getInstance().getCurrentUser();
+        String uid = user.getUid();
+
         listView = view.findViewById(R.id.friendList);
         ArrayAdapter arrayAdapter;
         ArrayList<String> email = new ArrayList<>(userList);
@@ -127,7 +139,48 @@ public class FriendFragment extends Fragment {
          listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            GeneralHelper.showMessage(getContext(),"This is friend no : " + email.get(position));
+            PopupMenu popupMenu = new PopupMenu(getContext(),view);
+            popupMenu.getMenuInflater().inflate(R.menu.friend_menu,popupMenu.getMenu());
+
+            GeneralHelper.showMessage(getContext(),"The unsettled amount with " + email.get(position) + " is " );
+
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+
+                    switch (item.getItemId()) {
+                        case R.id.settle_bill:
+
+                            GeneralHelper.showMessage(getContext(), "You have settled bill with " + email.get(position));
+
+                            break;
+
+                        case R.id.delete_friend:
+
+                            List<String> newUserList = userList;
+                            newUserList.remove(position);
+                            GeneralHelper.showMessage(getContext(), "You have remove friend with email : " + email.get(position));
+
+                            FirestoreHelper.addFriend(uid, newUserList, new FirebaseCallback() {
+                                @Override
+                                public void onResponse() {
+                                    GeneralHelper.showMessage(getContext(), "Successfully Deleted!");
+
+                                    Intent intent = new Intent(getContext(),MainActivity.class);
+                                    startActivity(intent);
+
+                                    arrayAdapter.notifyDataSetChanged();
+                                }
+                            });
+                            break;
+
+
+                    }
+                    return true;
+                }
+            });
+            popupMenu.show();
+
         }
     });
 }
