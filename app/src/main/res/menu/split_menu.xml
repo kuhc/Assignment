@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/split_unequal"
+        android:icon="@drawable/unequal"
+        android:title="Unequal" />
+
+    <item
+        android:id="@+id/split_adjustment"
+        android:icon="@drawable/ic_adjustment"
+        android:title="Adjustment" />
+</menu>
