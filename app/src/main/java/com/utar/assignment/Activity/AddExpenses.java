@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -22,11 +23,17 @@ import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.utar.assignment.Model.Group;
+import com.utar.assignment.Model.MainActivity;
 import com.utar.assignment.Model.User;
 import com.utar.assignment.R;
+import com.utar.assignment.Util.FirebaseCallback;
+import com.utar.assignment.Util.FirestoreHelper;
 import com.utar.assignment.Util.GeneralHelper;
 import com.utar.assignment.Util.SplitCalHelper;
 
@@ -46,9 +53,15 @@ public class AddExpenses extends AppCompatActivity {
     private Spinner groups;
     SplitCalHelper sh = new SplitCalHelper();
 
+    private String selected_group_id;
+
     private User userInfo;
 
-    List<String> userList = new ArrayList<>();
+    List<Group> group = new ArrayList<>();
+    List<User> userList = new ArrayList<>();
+
+    private com.utar.assignment.Model.MainActivity mainactivity;
+    private  Group cur_group;
 
     private static FirebaseFirestore fStore = FirebaseFirestore.getInstance();
     private FirebaseAuth Auth;
@@ -72,32 +85,45 @@ public class AddExpenses extends AppCompatActivity {
         expenses_name = (EditText) findViewById(R.id.add_expensesname);
         groups = findViewById(R.id.add_group);
 
-        List<String> supplierNames = Arrays.asList("Kampar group", "Ipoh Group", "KL Group");
 
-        ArrayAdapter<String> grouplist = new ArrayAdapter<String>
-                (AddExpenses.this, android.R.layout.simple_list_item_1,supplierNames);
-        grouplist.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        groups.setAdapter(grouplist);
+
 
         //get the user friend as suggestion
         FirebaseUser user;
         user = Auth.getInstance().getCurrentUser();
         String uid = user.getUid();
+
         db = FirebaseFirestore.getInstance();
         DocumentReference documentReference =db.collection("Users").document(uid);
         documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 userInfo = documentSnapshot.toObject(User.class);
-                if(userInfo.getFriendList()!= null) {
-                    userList.addAll(userInfo.getFriendList());
-                    user_share.setAdapter(new ArrayAdapter<>
-                            (AddExpenses.this, android.R.layout.simple_list_item_activated_1,userList));
 
-                }
+                //group list
+                CollectionReference groupRef = db.collection("Group_1");
+                groupRef.whereIn("groupId", userInfo.getGroupList()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        group=task.getResult().toObjects(Group.class);
+
+                        List<String> supplierNames = new ArrayList<>();
+                        for(int i = 0; i<group.size();i++){
+                            supplierNames.add(group.get(i).getGroupName());
+                        }
+
+                        ArrayAdapter<String> grouplist = new ArrayAdapter<String>
+                                (AddExpenses.this, android.R.layout.simple_list_item_1,supplierNames);
+                        grouplist.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        groups.setAdapter(grouplist);
+
+                        spinner_listener();
+                    }
+
+                });
+
             }
         });
-
 
 
 
@@ -145,6 +171,27 @@ public class AddExpenses extends AppCompatActivity {
                 amounts = Double.parseDouble(am);
                 split_to_database(split_user_list,amounts);
 
+
+
+                mainactivity = new com.utar.assignment.Model.MainActivity();
+                mainactivity.setName(expenses_name.getText().toString());
+
+                if(cur_group.getMainActivityList() == null){
+                    cur_group.setMainActivityList(new ArrayList<MainActivity>());
+                }
+
+                cur_group.getMainActivityList().add(mainactivity);
+
+                FirestoreHelper.setGroup(cur_group, new FirebaseCallback() {
+                    @Override
+                    public void onResponse() {
+                        GeneralHelper.showMessage(AddExpenses.this, "Split Successfully");
+                        finish();
+                    }
+                });
+
+
+
                 GeneralHelper.showMessage(AddExpenses.this,expenses_name.getText().toString());
             }
         });
@@ -155,6 +202,8 @@ public class AddExpenses extends AppCompatActivity {
             }
         });
     }
+
+
 
     //function to calculate the split amount
     public void cal_temp_result(){
@@ -203,4 +252,32 @@ public class AddExpenses extends AppCompatActivity {
         user_share.setText("");
         cal_temp_result();
     }
+
+    public void spinner_listener(){
+        groups.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                cur_group = group.get(position);
+                selected_group_id = group.get(position).getGroupId();
+                db.collection("Users").whereArrayContains("groupList",selected_group_id)
+                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                        userList = task.getResult().toObjects(User.class);
+                    }
+                });
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+
+            }
+        });
+
+    }
+
 }
