@@ -2,6 +2,7 @@ package com.utar.assignment.Model;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public class Group {
     private String Id;
@@ -10,7 +11,11 @@ public class Group {
     private String ownerId;
     private List<MainActivity> mainActivityList;
 
-    public Group() {
+    public Group() {this.Id = UUID.randomUUID().toString();
+    }
+    public Group(String groupName) {
+        this.Id = UUID.randomUUID().toString();
+    this.groupName=groupName;
     }
 
     public String getId() {

@@ -9,8 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Assignment">
-        <activity android:name=".Activity.AddFriend"></activity>
+        <activity android:name=".Activity.GroupMember"></activity>
         <activity android:name=".Activity.AddExpenses" />
+        <activity android:name=".Activity.new_member_group" />
+        <activity android:name=".Activity.AddFriend" />
+        <activity android:name=".Activity.specified_group" />
         <activity android:name=".Activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
