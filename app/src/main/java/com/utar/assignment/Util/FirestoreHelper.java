@@ -41,7 +41,7 @@ public class FirestoreHelper {
 
     // Get Group
     public static void getGroup(String Id, FirebaseCallback callback) {
-        fStore.collection("Groups").document(Id).get()
+        fStore.collection("Group_1").document(Id).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -53,7 +53,7 @@ public class FirestoreHelper {
 
     // Set Group
     public static void setGroup(Group group, FirebaseCallback callback) {
-        fStore.collection("Groups").document(group.getId()).set(group)
+        fStore.collection("Group_1").document(group.getId()).set(group)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {

@@ -4,124 +4,123 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context=".Activity.AddExpenses">
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|center_vertical"
-        android:layout_margin="50px"
-        android:fontFamily="sans-serif-smallcaps"
-        android:foregroundGravity="center_vertical"
-        android:gravity="center_vertical"
-        android:text="Add Expenses"
-        android:textColor="@color/black"
-        android:textSize="50sp" />
-
-    <TextView
-        android:id="@+id/add_result"
-        android:layout_width="291dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center_horizontal"
-        android:textColor="#000000"
-        android:textSize="24sp" />
-
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/add_chipGroup"
-        android:layout_width="376dp"
-        android:layout_height="84dp"
-        android:layout_gravity="center_horizontal"
-        app:singleLine="false">
-
-    </com.google.android.material.chip.ChipGroup>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="50px"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal">
-
-        <AutoCompleteTextView
-            android:id="@+id/add_usershare"
-            android:layout_width="346dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:autoText="false"
-            android:background="@drawable/custom_container"
-            android:dropDownHeight="wrap_content"
-            android:hint="Share User" />
-
-        <Button
-            android:id="@+id/add_adduser"
-            android:layout_width="151dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:onClick="add_user_chip"
-            android:text="User"
-            app:icon="@drawable/ic_add" />
-    </LinearLayout>
-
-    <EditText
-        android:id="@+id/add_amount"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:background="@drawable/custom_container"
-        android:ems="10"
-        android:hint="Amount"
-        android:inputType="number|text|numberDecimal|textEmailAddress"
-        android:numeric="integer"
-        android:padding="20dp" />
-
-    <EditText
-        android:id="@+id/add_expensesname"
-        android:layout_width="376dp"
-        android:layout_height="65dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_margin="50px"
-        android:background="@drawable/custom_container"
-        android:ems="10"
-        android:hint="Expenses Name"
-        android:inputType="textEmailAddress"
-        android:padding="20dp" />
-
-    <Spinner
-        android:id="@+id/add_group"
-        android:layout_width="332dp"
-        android:layout_height="55dp"
-        android:layout_gravity="center_horizontal"
-        android:dropDownSelector="@android:drawable/dialog_frame"
-        android:scrollbarAlwaysDrawVerticalTrack="false"
-        android:spinnerMode="dialog"
-        android:splitMotionEvents="false" />
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:fitsSystemWindows="true"
+        android:isScrollContainer="true">
 
-        <Button
-            android:id="@+id/add_cancel"
-            android:layout_width="160dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20px"
-            android:layout_weight="1"
-            android:text="@android:string/cancel" />
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/add_split"
-            android:layout_width="178dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="20px"
-            android:text="Split Up" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_margin="50px"
+                android:fontFamily="sans-serif-smallcaps"
+                android:foregroundGravity="center_vertical"
+                android:gravity="center_vertical"
+                android:text="Add Expenses"
+                android:textColor="@color/black"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/add_result"
+                android:layout_width="291dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:textColor="#000000"
+                android:textSize="24sp" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/add_chipGroup"
+                android:layout_width="376dp"
+                android:layout_height="84dp"
+                android:layout_gravity="center_horizontal"
+                app:singleLine="false">
+
+            </com.google.android.material.chip.ChipGroup>
+
+            <Spinner
+                android:id="@+id/add_group"
+                android:layout_width="332dp"
+                android:layout_height="55dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="50px"
+                android:dropDownSelector="@android:drawable/dialog_frame"
+                android:scrollbarAlwaysDrawVerticalTrack="false"
+                android:spinnerMode="dropdown"
+                android:splitMotionEvents="false" />
+
+            <EditText
+                android:id="@+id/add_amount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/custom_container"
+                android:ems="10"
+                android:hint="Amount"
+                android:inputType="number|text|numberDecimal|textEmailAddress"
+                android:numeric="integer"
+                android:padding="20dp" />
+
+            <EditText
+                android:id="@+id/add_expensesname"
+                android:layout_width="376dp"
+                android:layout_height="65dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="50px"
+                android:background="@drawable/custom_container"
+                android:ems="10"
+                android:hint="Expenses Name"
+                android:inputType="textEmailAddress"
+                android:padding="20dp" />
+
+            <Button
+                android:id="@+id/add_split_unequally"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="50px"
+                android:gravity="center_horizontal"
+                android:text="Unequally Split" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/add_cancel"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20px"
+                    android:layout_weight="1"
+                    android:text="@android:string/cancel"
+                    app:backgroundTint="#F60505" />
+
+                <Button
+                    android:id="@+id/add_split"
+                    android:layout_width="178dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20px"
+                    android:text="Split Up" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
 
 </LinearLayout>

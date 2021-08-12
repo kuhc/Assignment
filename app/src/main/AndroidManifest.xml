@@ -8,8 +8,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Assignment">
-        <activity android:name=".Activity.splitActivity"></activity>
+        android:theme="@style/Theme.Assignment"
+        >
+
+        <activity android:name=".Activity.splitActivity" />
         <activity android:name=".Activity.GroupMember" />
         <activity android:name=".Activity.AddExpenses" />
         <activity android:name=".Activity.new_member_group" />
