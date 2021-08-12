@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.utar.assignment"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -19,8 +19,21 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+
+    signingConfigs {
+        config {
+            storeFile file('C:/Users/kuhc0/Desktop/Y3S1/UCCD3223 Mobile Applications Development/Certificate.jks')
+            storePassword '123123123z'
+            keyPassword '123123123z'
+            keyAlias 'key0'
+        }
+    }
     buildTypes {
+        debug {
+            signingConfig signingConfigs.config
+        }
         release {
+            signingConfig signingConfigs.config
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -53,4 +66,6 @@ dependencies {
 
     //android material
     implementation 'com.google.android.material:material:1.1.0'
+    implementation 'com.huawei.hms:push:5.1.1.301'
 }
+apply plugin: 'com.huawei.agconnect'

@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Assignment">
-        <activity android:name=".Activity.splitActivity"></activity>
+        <activity android:name=".Activity.splitActivity" />
         <activity android:name=".Activity.GroupMember" />
         <activity android:name=".Activity.AddExpenses" />
         <activity android:name=".Activity.new_member_group" />
@@ -24,6 +24,18 @@
         </activity>
         <activity android:name=".Activity.RegisterActivity" />
         <activity android:name=".Activity.MainActivity" />
+
+        <meta-data
+            android:name="push_kit_auto_init_enabled"
+            android:value="true" />
+
+        <service
+            android:name=".PushMsgService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.huawei.push.action.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

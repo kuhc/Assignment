@@ -8,12 +8,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.api.Distribution;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.utar.assignment.Fragment.FriendFragment;
@@ -22,16 +25,22 @@ import com.utar.assignment.Fragment.HomeFragment;
 import com.utar.assignment.Fragment.ProfileFragment;
 import com.utar.assignment.Model.User;
 import com.utar.assignment.R;
+import com.utar.assignment.Util.FirebaseCallback;
+import com.utar.assignment.Util.FirestoreHelper;
 import com.utar.assignment.Util.GeneralHelper;
 
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNav;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Run Hms Push Kit
+        HmsPushKit();
 
         bottomNav = findViewById(R.id.bottom_nav);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
@@ -66,8 +75,17 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private void HmsPushKit() {
+        FirestoreHelper.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new FirebaseCallback() {
+            @Override
+            public void onResponse(Object object) {
+                user = (User) object;
 
-
-
-
+                // Check User Token
+                if(user.getPushToken() == null || user.getPushToken().isEmpty()) {
+                    GeneralHelper.getToken(getApplicationContext(), user);
+                }
+            }
+        });
+    }
 }
