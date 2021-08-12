@@ -205,6 +205,7 @@ public class AddExpenses extends AppCompatActivity {
                     intent.putExtra("name", expenses_name.getText().toString());
                     intent.putExtra("group", cur_group.getGroupId());
                     startActivity(intent);
+
                 }
                 else{
                     GeneralHelper.showMessage(AddExpenses.this,"Please fill in both Amount or Expenses");
