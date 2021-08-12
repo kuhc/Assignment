@@ -7,6 +7,7 @@ public class User {
     private String Uid;
     private String email;
     private String username;
+    private String pushToken;
     private List<String> groupList;
     private List<Amount> amountList;
     private List<String> friendList;
@@ -19,6 +20,14 @@ public class User {
         this.Uid = Uid;
         this.username = username;
         this.email = email;
+    }
+
+    public String getPushToken() {
+        return pushToken;
+    }
+
+    public void setPushToken(String pushToken) {
+        this.pushToken = pushToken;
     }
 
     public List<Amount> getAmountList() {
