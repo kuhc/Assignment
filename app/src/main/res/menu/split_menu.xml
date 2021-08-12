@@ -9,4 +9,9 @@
         android:id="@+id/split_adjustment"
         android:icon="@drawable/ic_adjustment"
         android:title="Adjustment" />
+
+    <item
+        android:id="@+id/split_percentage"
+        android:icon="@drawable/percentage"
+        android:title="Percentage" />
 </menu>
