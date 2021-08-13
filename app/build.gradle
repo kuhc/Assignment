@@ -22,7 +22,7 @@ android {
 
     signingConfigs {
         config {
-            storeFile file('C:/Users/kuhc0/Desktop/Y3S1/UCCD3223 Mobile Applications Development/Certificate.jks')
+            storeFile file('Certificate.jks')
             storePassword '123123123z'
             keyPassword '123123123z'
             keyAlias 'key0'
