@@ -4,6 +4,7 @@
  *  and used to receive token information or messages returned by HMS server
  *
  */
+
 package com.utar.assignment;
 
 import android.text.TextUtils;
@@ -29,3 +30,4 @@ public class PushMsgService extends HmsMessageService {
         Log.i(TAG, "sending token to server. token:" + token);
     }
 }
+
