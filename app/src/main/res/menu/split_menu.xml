@@ -12,6 +12,6 @@
 
     <item
         android:id="@+id/split_percentage"
-        android:icon="@drawable/percentage"
+        android:icon="@drawable/ic_percentage_background"
         android:title="Percentage" />
 </menu>

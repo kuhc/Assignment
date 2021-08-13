@@ -14,6 +14,7 @@
         <activity android:name=".Activity.new_member_group" />
         <activity android:name=".Activity.AddFriend" />
         <activity android:name=".Activity.specified_group" />
+        <activity android:name=".Activity.settleBill"/>
         <activity android:name=".Activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

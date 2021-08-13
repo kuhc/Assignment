@@ -1,9 +1,8 @@
 package com.utar.assignment.Fragment;
 
-import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.telephony.mbms.MbmsErrors;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +16,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,13 +27,16 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.utar.assignment.Activity.AddFriend;
 import com.utar.assignment.Activity.MainActivity;
+import com.utar.assignment.Model.Amount;
 import com.utar.assignment.Model.User;
 import com.utar.assignment.R;
 import com.utar.assignment.Util.FirebaseCallback;
 import com.utar.assignment.Util.FirestoreHelper;
 import com.utar.assignment.Util.GeneralHelper;
+import com.utar.assignment.Util.friend_adapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,13 +47,15 @@ public class FriendFragment extends Fragment {
     private static FirebaseFirestore fStore = FirebaseFirestore.getInstance();
     private FirebaseAuth Auth;
     FirebaseFirestore db;
-    RecyclerView recyclerView;
+
     private User userInfo;
     TextView username;
     TextView friendNo;
     List<String> userList = new ArrayList<>();
+    List<String> friendID = new ArrayList<>();
     View view;
     ListView listView;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,6 +64,7 @@ public class FriendFragment extends Fragment {
 
         username = view.findViewById(R.id.friend_frag_uname);
         friendNo = view.findViewById(R.id.friend_no);
+
 
         FirebaseUser user;
         user = Auth.getInstance().getCurrentUser();
@@ -71,7 +76,6 @@ public class FriendFragment extends Fragment {
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         User user1 = task.getResult().toObject(User.class);
                         String um = user1.getUsername();
-
 
                         username.setText(um);
                     }
@@ -86,44 +90,75 @@ public class FriendFragment extends Fragment {
             }
         });
 
-       /* FirestoreHelper.getUser(uid, new FirebaseCallback() {
-            @Override
-            public void onResponse(Object object) {
-
-
-                recyclerView = view.findViewById(R.id.freindListRecycle);
-                userInfo = (User)object;
-                userList.addAll(userInfo.getFriendList());
-                int fNo = userList.size();
-                String fNo1 = Integer.toString(fNo);
-                friendNo.setText(fNo1);
-            }
-        });*/
-
         db = FirebaseFirestore.getInstance();
+
         DocumentReference documentReference =db.collection("Users").document(uid);
         documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 userInfo = documentSnapshot.toObject(User.class);
-                if(userInfo.getFriendList()!= null) {
+
+                if (userInfo.getFriendList().size() == 0) {
+                    GeneralHelper.showMessage(getContext(), "There is no existing friend!");
+                }
+                else if(userInfo.getFriendList()!= null) {
                     userList.addAll(userInfo.getFriendList());
                     int fNo = userList.size();
                     String fNo1 = Integer.toString(fNo);
                     friendNo.setText(fNo1);
 
-                    initializeListView(userInfo, userList);
+                    db.collection("Users").whereIn("email",userList).get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    List<User> userList2 = new ArrayList<>();
+                                    userList2=task.getResult().toObjects(User.class);
+
+                                    List<String> amounts = new ArrayList<>();
+                                    amounts.add("100");
+                                    amounts.add("200");
+                                    amounts.add("300");
+
+                                    /*List<String> friendUsername = new ArrayList<>();
+                                    for(int i=0; i<userList2.size();i++)
+                                    {
+                                        friendUsername.add(userList2.get(i).getUsername());
+                                    }*/
+
+                                    /*RecyclerView recyclerView;
+                                    LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                                    recyclerView = view.findViewById(R.id.friendList);
+                                    recyclerView.setLayoutManager(layoutManager);
+
+                                    friend_adapter adapter;
+                                    adapter= new friend_adapter(userList2,amounts,getActivity());
+                                    recyclerView.setAdapter(adapter);*/
+                                    initializeRecycleView(userList2, amounts,userList,uid, getActivity());
+                                }
+
+                            });
                 }
-                else
-                    GeneralHelper.showMessage(getContext(),"There is no existing friend!");
-                //initializeRecycleView(userList);
+
             }
         });
-
         return view;
     }
 
-    public void initializeListView(User userInfo, List<String> userList) {
+    public void initializeRecycleView (List<User> user, List<String> amount, List<String> userFriendList, String uid, Context context)
+    {
+        RecyclerView recyclerView;
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
+        recyclerView = view.findViewById(R.id.friendList);
+        recyclerView.setLayoutManager(layoutManager);
+
+        friend_adapter adapter;
+        adapter= new friend_adapter(user,amount,userFriendList,uid,getActivity());
+        recyclerView.setAdapter(adapter);
+    }
+
+    /*public void initializeListView(User userInfo, List<String> userList) {
 
         FirebaseUser user;
         user = Auth.getInstance().getCurrentUser();
@@ -183,7 +218,7 @@ public class FriendFragment extends Fragment {
 
         }
     });
-}
+}*/
 
     /*private void initializeRecycleView(List<String> userList) {
 
