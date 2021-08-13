@@ -3,13 +3,16 @@ package com.utar.assignment.Util;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.utar.assignment.Activity.MainActivity;
 import com.utar.assignment.Activity.settleBill;
 import com.utar.assignment.Activity.specified_group;
 import com.utar.assignment.Model.Amount;
@@ -22,12 +25,16 @@ public class friend_adapter extends RecyclerView.Adapter<friend_adapter.ViewHold
 
     private List<User> userList;
     private List<String> amountList;
+    List<String> userFriendList;
+    String uid;
     private Context context;
 
-    public friend_adapter(List<User> userList, List<String> amountList, Context context)
+    public friend_adapter(List<User> userList, List<String> amountList, List<String> userFriendList,String uid, Context context)
     {
         this.userList=userList;
         this.amountList = amountList;
+        this.userFriendList = userFriendList;
+        this.uid = uid;
         this.context=context;
     }
     @NonNull
@@ -59,11 +66,55 @@ public class friend_adapter extends RecyclerView.Adapter<friend_adapter.ViewHold
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, settleBill.class);
-                    int i = getAdapterPosition();
-                    intent.putExtra("userID", userList.get(i).getUid());
-                    intent.putExtra("position", i);
-                    context.startActivity(intent);
+
+                    PopupMenu popupMenu = new PopupMenu(context,v);
+                    popupMenu.getMenuInflater().inflate(R.menu.friend_menu,popupMenu.getMenu());
+
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+
+                            switch (item.getItemId()) {
+
+                                case R.id.settle_bill:
+
+                                    Intent intent2 = new Intent(context, settleBill.class);
+                                    int a = getAdapterPosition();
+                                    int b = userFriendList.size()-1;
+                                    int c = b-a;
+                                    intent2.putExtra("userID", userList.get(a).getUid());
+                                    intent2.putExtra("position", c);
+                                    context.startActivity(intent2);
+                                    GeneralHelper.showMessage(context,"This is testing " + userList.get(a).getUsername());
+                                    break;
+
+                                case R.id.delete_friend:
+
+                                    List<String> newUserList = userFriendList;
+                                    int z = getAdapterPosition();
+                                    int x = userFriendList.size()-1;
+                                    int y = x-z;
+                                    GeneralHelper.showMessage(context, "You have remove friend with email : " + newUserList.get(x-z));
+                                    newUserList.remove(y);
+
+
+                                    FirestoreHelper.addFriend(uid, newUserList, new FirebaseCallback() {
+                                        @Override
+                                        public void onResponse() {
+                                            GeneralHelper.showMessage(context, "Successfully Deleted!");
+
+                                            Intent intent = new Intent(context, MainActivity.class);
+                                            context.startActivity(intent);
+
+                                        }
+                                    });
+                                    break;
+                            }
+                            return true;
+                        }
+                    });
+                    popupMenu.show();
+
                 }
             });
         }

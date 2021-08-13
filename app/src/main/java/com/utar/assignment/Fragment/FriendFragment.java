@@ -116,8 +116,8 @@ public class FriendFragment extends Fragment {
 
                                     List<String> amounts = new ArrayList<>();
                                     amounts.add("100");
-                                    //amounts.add("200");
-                                    //amounts.add("300");
+                                    amounts.add("200");
+                                    amounts.add("300");
 
                                     /*List<String> friendUsername = new ArrayList<>();
                                     for(int i=0; i<userList2.size();i++)
@@ -133,7 +133,7 @@ public class FriendFragment extends Fragment {
                                     friend_adapter adapter;
                                     adapter= new friend_adapter(userList2,amounts,getActivity());
                                     recyclerView.setAdapter(adapter);*/
-                                    initializeRecycleView(userList2, amounts, getActivity());
+                                    initializeRecycleView(userList2, amounts,userList,uid, getActivity());
                                 }
 
                             });
@@ -144,15 +144,17 @@ public class FriendFragment extends Fragment {
         return view;
     }
 
-    public void initializeRecycleView (List<User> user, List<String> amount, Context context)
+    public void initializeRecycleView (List<User> user, List<String> amount, List<String> userFriendList, String uid, Context context)
     {
         RecyclerView recyclerView;
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
         recyclerView = view.findViewById(R.id.friendList);
         recyclerView.setLayoutManager(layoutManager);
 
         friend_adapter adapter;
-        adapter= new friend_adapter(user,amount,getActivity());
+        adapter= new friend_adapter(user,amount,userFriendList,uid,getActivity());
         recyclerView.setAdapter(adapter);
     }
 
