@@ -15,6 +15,7 @@ import com.utar.assignment.Model.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class SplitCalHelper {
 
@@ -44,6 +45,7 @@ public class SplitCalHelper {
         }
         mainactivity.setSubActivityList(subactivity_List);
         mainactivity.setName(exp_name);
+        mainactivity.setId(UUID.randomUUID().toString());
 
         mainactivity.setBillAmount(amount);
         FirestoreHelper.getGroup(group_id, new FirebaseCallback() {
