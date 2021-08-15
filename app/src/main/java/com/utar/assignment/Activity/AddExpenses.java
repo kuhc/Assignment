@@ -374,10 +374,13 @@ public class AddExpenses extends AppCompatActivity {
                         chipGroup.addView(default_chip);
 
                         userList = task.getResult().toObjects(User.class);
+
                         for (int i = 0 ; i < userList.size(); i++){
+
                             if(userList.get(i).getUsername().matches(userInfo.getUsername())){
-                                break;
+                                continue;
                             }
+
                             add_user_chip(view,userList.get(i).getUsername());
                         }
 
