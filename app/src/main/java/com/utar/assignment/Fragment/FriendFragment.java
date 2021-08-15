@@ -118,21 +118,9 @@ public class FriendFragment extends Fragment {
                                     amounts.add("100");
                                     amounts.add("200");
                                     amounts.add("300");
+                                    List<Amount> amountList = userInfo.getAmountList();
 
-                                    /*List<String> friendUsername = new ArrayList<>();
-                                    for(int i=0; i<userList2.size();i++)
-                                    {
-                                        friendUsername.add(userList2.get(i).getUsername());
-                                    }*/
 
-                                    /*RecyclerView recyclerView;
-                                    LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-                                    recyclerView = view.findViewById(R.id.friendList);
-                                    recyclerView.setLayoutManager(layoutManager);
-
-                                    friend_adapter adapter;
-                                    adapter= new friend_adapter(userList2,amounts,getActivity());
-                                    recyclerView.setAdapter(adapter);*/
                                     initializeRecycleView(userList2, amounts,userList,uid, getActivity());
                                 }
 

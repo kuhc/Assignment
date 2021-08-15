@@ -62,6 +62,8 @@ public class settleBill extends AppCompatActivity {
 
                     }
                 });*/
+        String amount = getIntent().getStringExtra("amount") ;
+        amountToPay.setText(amount);
 
         int position = getIntent().getIntExtra("position",-1);
         GeneralHelper.showMessage(settleBill.this,"Position : " + position);
