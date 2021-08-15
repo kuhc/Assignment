@@ -2,6 +2,7 @@ package com.utar.assignment.Util;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +13,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.utar.assignment.Activity.MainActivity;
 import com.utar.assignment.Activity.settleBill;
 import com.utar.assignment.Activity.specified_group;
@@ -51,6 +55,7 @@ public class friend_adapter extends RecyclerView.Adapter<friend_adapter.ViewHold
         User user = userList.get(position);
         holder.txtName.setText(user.getUsername());
         holder.amount.setText(amountList.get(position));
+        holder.amount.setTextColor(Color.RED);
     }
 
 
@@ -84,6 +89,7 @@ public class friend_adapter extends RecyclerView.Adapter<friend_adapter.ViewHold
                                     int c = b-a;
                                     intent2.putExtra("userID", userList.get(a).getUid());
                                     intent2.putExtra("position", c);
+                                    intent2.putExtra("amount",amountList.get(a));
                                     context.startActivity(intent2);
                                     GeneralHelper.showMessage(context,"This is testing " + userList.get(a).getUsername());
                                     break;
@@ -108,6 +114,16 @@ public class friend_adapter extends RecyclerView.Adapter<friend_adapter.ViewHold
 
                                         }
                                     });
+
+                                    //Delete amount list
+                                    /*FirebaseFirestore fStore = FirebaseFirestore.getInstance();
+                                    fStore.collection("Users").document(uid).update("amountList",amountList)
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    GeneralHelper.showMessage(context,"Deleted Amount list!");
+                                                }
+                                            });*/
                                     break;
                             }
                             return true;
