@@ -171,7 +171,9 @@ public class SplitCalHelper {
             }
         });
 
+    }
 
+    public void clear_bill(String owner_id, String payer_id,double amount){
 
     }
 
