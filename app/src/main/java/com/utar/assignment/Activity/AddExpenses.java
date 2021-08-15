@@ -42,6 +42,7 @@ import com.utar.assignment.Util.SplitCalHelper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class AddExpenses extends AppCompatActivity {
 
@@ -197,6 +198,7 @@ public class AddExpenses extends AppCompatActivity {
 
 
                     Intent intent = new Intent(AddExpenses.this, splitActivity.class);
+
                     //insert username
                     for (int i = 0; i < split_user_list.size(); i++) {
                         String temp_user = split_user_list.get(i);
@@ -278,6 +280,7 @@ public class AddExpenses extends AppCompatActivity {
         }
         mainactivity.setSubActivityList(subactivity_List);
         mainactivity.setName(expenses_name.getText().toString());
+        mainactivity.setId(UUID.randomUUID().toString());
 
         double amounts;
         String temp_amount =amount.getText().toString();
