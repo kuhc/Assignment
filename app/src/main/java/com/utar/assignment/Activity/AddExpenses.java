@@ -195,17 +195,26 @@ public class AddExpenses extends AppCompatActivity {
                         split_user_list.add(user);
                     }
 
+
                     Intent intent = new Intent(AddExpenses.this, splitActivity.class);
+                    //insert username
                     for (int i = 0; i < split_user_list.size(); i++) {
                         String temp_user = split_user_list.get(i);
                         intent.putExtra("users" + i, temp_user);
                     }
 
+                    ArrayList<String> split_userid_list = find_user_id(split_user_list);
+                    split_userid_list.add(0,userInfo.getUid());
+                    //insert userid
+                    for (int i = 0; i < split_userid_list.size(); i++) {
+                        String temp_user = split_userid_list.get(i);
+                        intent.putExtra("usersid" + i, temp_user);
+                    }
                     intent.putExtra("amount", amount.getText().toString());
                     intent.putExtra("name", expenses_name.getText().toString());
                     intent.putExtra("group", cur_group.getGroupId());
                     startActivity(intent);
-
+                    finish();
                 }
                 else{
                     GeneralHelper.showMessage(AddExpenses.this,"Please fill in both Amount or Expenses");
@@ -245,24 +254,24 @@ public class AddExpenses extends AppCompatActivity {
 
 
     //save amount to
-    public void split_to_database(List<String> Temp_userlist, double split_amount){
+    public void split_to_database(ArrayList<String> Temp_userlist, double split_amount){
 
-        ArrayList<String> splituser_id_list = new ArrayList<>();
+        ArrayList<String> splituser_id_list =  find_user_id(Temp_userlist);
+        splituser_id_list.add(0,userInfo.getUid());
 
-        mainactivity = new com.utar.assignment.Model.MainActivity();
+        ArrayList<Double> split_amount_list = new ArrayList<>();
 
-        for(int i = 0 ; i<Temp_userlist.size() ; i++){
-            for(int j = 0 ; j < userList.size() ; j++){
-                if(Temp_userlist.get(i).matches(userList.get(j).getUsername())){
-                    splituser_id_list.add(userList.get(j).getUid());
-                    break;
-                }
-            }
+        for(int i = 0; i<splituser_id_list.size();i++){
+            split_amount_list.add(split_amount);
         }
 
-        for (int i = 0 ; i<Temp_userlist.size()-1 ; i++){
+        sh.update_amount_list(splituser_id_list,split_amount_list,AddExpenses.this);
+
+        mainactivity = new com.utar.assignment.Model.MainActivity();
+        
+        for (int i = 1 ; i<Temp_userlist.size() ; i++){
             subactivity = new SubActivity();
-            subactivity.setPayerId(userInfo.getUid());
+            subactivity.setPayerId(splituser_id_list.get(0));
             subactivity.setOwnerId(splituser_id_list.get(i));
             subactivity.setAmount(split_amount);
             subactivity_List.add(subactivity);
@@ -270,7 +279,7 @@ public class AddExpenses extends AppCompatActivity {
         mainactivity.setSubActivityList(subactivity_List);
         mainactivity.setName(expenses_name.getText().toString());
 
-        double amounts = 0;
+        double amounts;
         String temp_amount =amount.getText().toString();
         if(temp_amount.matches("")){
             amounts=0;
@@ -278,7 +287,6 @@ public class AddExpenses extends AppCompatActivity {
             amounts = Double.parseDouble(temp_amount);
         }
         mainactivity.setBillAmount(amounts);
-
 
         if(cur_group.getMainActivityList() == null){
             cur_group.setMainActivityList(new ArrayList<MainActivity>());
@@ -321,6 +329,21 @@ public class AddExpenses extends AppCompatActivity {
 
         chipGroup.addView(chip);
         cal_temp_result();
+    }
+
+    public ArrayList<String> find_user_id(ArrayList<String> Temp_userlist){
+
+        ArrayList<String> splituser_id_list = new ArrayList<>();
+
+        for(int i = 0 ; i<Temp_userlist.size() ; i++){
+            for(int j = 0 ; j < userList.size() ; j++){
+                if(Temp_userlist.get(i).matches(userList.get(j).getUsername())){
+                    splituser_id_list.add(userList.get(j).getUid());
+                    break;
+                }
+            }
+        }
+        return splituser_id_list;
     }
 
 

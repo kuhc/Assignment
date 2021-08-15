@@ -10,7 +10,7 @@
         android:theme="@style/Theme.Assignment">
         <activity android:name=".Activity.splitActivity"></activity>
         <activity android:name=".Activity.GroupMember" />
-        <activity android:name=".Activity.AddExpenses" />
+        <activity android:name=".Activity.AddExpenses" android:noHistory="true"/>
         <activity android:name=".Activity.new_member_group" />
         <activity android:name=".Activity.AddFriend" />
         <activity android:name=".Activity.specified_group" />
