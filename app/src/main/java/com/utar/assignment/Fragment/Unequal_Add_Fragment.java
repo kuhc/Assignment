@@ -25,9 +25,15 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.utar.assignment.Activity.AddExpenses;
+import com.utar.assignment.Model.User;
 import com.utar.assignment.R;
+import com.utar.assignment.Util.FirebaseCallback;
+import com.utar.assignment.Util.FirestoreHelper;
+import com.utar.assignment.Util.GeneralHelper;
+import com.utar.assignment.Util.SplitCalHelper;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Unequal_Add_Fragment extends Fragment {
 
@@ -39,7 +45,7 @@ public class Unequal_Add_Fragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         ArrayList<String> split_user_list = new ArrayList<>();
-
+        ArrayList<String> split_userid_list = new ArrayList<>();
 
         Intent intent = getActivity().getIntent();
         int temp_i = 0;
@@ -49,10 +55,17 @@ public class Unequal_Add_Fragment extends Fragment {
             temp_i++;
         }
 
-        int split_user = split_user_list.size();
-        double amount;
+        int temp_j= 0;
+        while (intent.hasExtra("usersid" + temp_j)){
+            String temp = intent.getStringExtra("usersid" + temp_j);
+            split_userid_list.add(temp);
+            temp_j++;
+        }
 
-        amount = Double.parseDouble(getActivity().getIntent().getStringExtra("amount"));
+
+        int split_user = split_user_list.size();
+        double amount = Double.parseDouble(intent.getStringExtra("amount"));
+
 
         LinearLayout ll = new LinearLayout (getActivity());
         ll.setOrientation(LinearLayout.VERTICAL);
@@ -62,7 +75,6 @@ public class Unequal_Add_Fragment extends Fragment {
         btn_split = new Button(getActivity());
         btn_split.setText("Split Unequally");
         btn_split.setEnabled(false);
-
 
 
         result.setId(result.generateViewId());
@@ -92,7 +104,6 @@ public class Unequal_Add_Fragment extends Fragment {
             tv.setWidth(200);
             tv.setText(split_user_list.get(i));
             ll_hori.addView(tv);
-
 
             EditText editText = new EditText(getActivity());
             editText.setId(id_generate);
@@ -148,12 +159,27 @@ public class Unequal_Add_Fragment extends Fragment {
         }
 
 
+
         btn_split.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int finalI = 1;
-                EditText temp= new EditText(getActivity());
-                Toast.makeText(getActivity(), "This is Test" + list.get(finalI).getText().toString(), Toast.LENGTH_SHORT).show();
+                ArrayList<Double> amount_list = new ArrayList<>();
+                for(int i = 0; i<list.size();i++){
+
+                    double amounts = 0;
+                    String text =list.get(i).getText().toString();
+                    if(text.matches("")){
+                        amounts=0;
+                    }else{
+                        amounts = Double.parseDouble(text);
+                    }
+                    amount_list.add(amounts);
+                }
+                SplitCalHelper sh = new SplitCalHelper();
+                sh.create_main_activity(getActivity(),split_userid_list,amount_list,intent.getStringExtra("name"),
+                        intent.getStringExtra("group"),amount);
+
+                getActivity().finish();
             }
         });
 

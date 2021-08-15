@@ -40,6 +40,10 @@ public class Amount {
         return amount;
     }
 
+    public void updateAmount(double temp_amount) {
+        this.amount= amount + temp_amount;
+    }
+
     public void setAmount(double amount) {
         this.amount = amount;
     }

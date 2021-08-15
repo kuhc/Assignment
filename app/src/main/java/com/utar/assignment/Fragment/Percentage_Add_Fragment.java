@@ -26,6 +26,8 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.utar.assignment.Activity.AddExpenses;
 import com.utar.assignment.R;
+import com.utar.assignment.Util.FirestoreHelper;
+import com.utar.assignment.Util.SplitCalHelper;
 
 import java.util.ArrayList;
 
@@ -39,11 +41,30 @@ public class Percentage_Add_Fragment extends Fragment {
 
         //View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        //tempppp dataaaa
-        int split_user = 5;
-        double amount = 500;
+        ArrayList<String> split_user_list = new ArrayList<>();
+        ArrayList<String> split_userid_list = new ArrayList<>();
+
+        Intent intent = getActivity().getIntent();
+        int temp_i = 0;
+        while (intent.hasExtra("users" + temp_i)){
+            String temp = intent.getStringExtra("users" + temp_i);
+            split_user_list.add(temp);
+            temp_i++;
+        }
+
+        int temp_j= 0;
+        while (intent.hasExtra("usersid" + temp_j)){
+            String temp = intent.getStringExtra("usersid" + temp_j);
+            split_userid_list.add(temp);
+            temp_j++;
+        }
+
+
+        int split_user = split_user_list.size();
+        double amount = Double.parseDouble(intent.getStringExtra("amount"));;
 
         double split = amount/split_user;
+
 
         LinearLayout ll = new LinearLayout (getActivity());
         ll.setOrientation(LinearLayout.VERTICAL);
@@ -85,7 +106,7 @@ public class Percentage_Add_Fragment extends Fragment {
             tv.setId(tv.generateViewId());
             tv.setHeight(100);
             tv.setWidth(200);
-            tv.setText("ID "+id_generate);
+            tv.setText(split_user_list.get(i));
             ll_hori.addView(tv);
 
             tv_pay.setId(tv.generateViewId());
@@ -142,11 +163,18 @@ public class Percentage_Add_Fragment extends Fragment {
 
 
         btn_split.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                int finalI = 1;
-                EditText temp= new EditText(getActivity());
-                Toast.makeText(getActivity(), "This is " + list.get(finalI).getText().toString(), Toast.LENGTH_SHORT).show();
+
+                ArrayList<Double> amount_list = cal_result_list(list,amount);
+
+                SplitCalHelper sh = new SplitCalHelper();
+                sh.create_main_activity(getActivity(),split_userid_list,amount_list,intent.getStringExtra("name"),
+                        intent.getStringExtra("group"),amount);
+
+                getActivity().finish();
+
             }
         });
 
@@ -177,7 +205,6 @@ public class Percentage_Add_Fragment extends Fragment {
 
     public void cal_temp_result(ArrayList<EditText> list,ArrayList<TextView> tv_list,double amount) {
         double percentage;
-
         for (int i = 0; i < list.size(); i++) {
 
             double result;
@@ -191,8 +218,25 @@ public class Percentage_Add_Fragment extends Fragment {
             result = Math.round(((amount * percentage) / 100) * 100.0) / 100.0;
 
             tv_list.get(i).setText("RM" + result);
-
         }
+    }
+
+    public ArrayList<Double> cal_result_list (ArrayList<EditText> percentage_list,double amount){
+        double percentage;
+        ArrayList<Double> result_list = new ArrayList<>();
+
+        for (int i = 0; i < percentage_list.size(); i++) {
+
+            String temp_string = percentage_list.get(i).getText().toString();
+            if (temp_string.matches("") || temp_string.matches("-")) {
+                percentage = 0;
+            } else {
+                percentage = Double.parseDouble(temp_string);
+            }
+            result_list.add(Math.round(((amount * percentage) / 100) * 100.0) / 100.0);
+        }
+
+        return result_list;
     }
 
 }

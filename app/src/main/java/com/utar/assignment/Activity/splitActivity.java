@@ -48,9 +48,9 @@ public class splitActivity extends AppCompatActivity {
                     selectedFragment = new Adjustment_Add_Fragment();
                     break;
 
-                /*case R.id.split_percentage:
+                case R.id.split_percentage:
                     selectedFragment = new Percentage_Add_Fragment();
-                    break;*/
+                    break;
             }
 
             getSupportFragmentManager().beginTransaction().replace(R.id.split_container, selectedFragment).commit();
