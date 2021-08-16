@@ -191,7 +191,7 @@ public class SplitCalHelper {
                     String getOwnerid=  amountList.get(i).getOwnerId();
                     if(getOwnerid.equals(payer_id))
                     {
-                        GeneralHelper.showMessage(context,"This is the number " + i + " " + amountList.get(i).getAmount());
+                        //GeneralHelper.showMessage(context,"This is the number " + i + " " + amountList.get(i).getAmount());
                         double exitingAmount = amountList.get(i).getAmount();
                         if( exitingAmount< 0)
                         {
@@ -227,7 +227,7 @@ public class SplitCalHelper {
                     String getPayerid=  amountList.get(i).getOwnerId();
                     if(getPayerid.equals(owner_id))
                     {
-                        GeneralHelper.showMessage(context,"This is the number2  " + i + " " + amountList.get(i).getAmount());
+                        //GeneralHelper.showMessage(context,"This is the number2  " + i + " " + amountList.get(i).getAmount());
                         double exitingAmount = amountList.get(i).getAmount();
                         if( exitingAmount< 0)
                         {
