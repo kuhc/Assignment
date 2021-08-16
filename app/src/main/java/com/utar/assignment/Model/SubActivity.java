@@ -51,4 +51,5 @@ public class SubActivity {
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
+
 }

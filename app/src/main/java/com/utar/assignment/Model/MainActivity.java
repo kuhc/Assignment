@@ -3,7 +3,7 @@ package com.utar.assignment.Model;
 import java.util.Date;
 import java.util.List;
 
-public class MainActivity {
+public class MainActivity implements Comparable<MainActivity> {
     private String Id;
     private String name;
     private double billAmount;
@@ -51,5 +51,13 @@ public class MainActivity {
 
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
+    }
+
+    @Override
+    public int compareTo(MainActivity o) {
+        if (getCreatedDate() == null || o.getCreatedDate() == null){
+            return 1;
+        }
+        return getCreatedDate().compareTo(o.getCreatedDate());
     }
 }

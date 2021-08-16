@@ -41,6 +41,7 @@ import com.utar.assignment.Util.SplitCalHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -256,6 +257,7 @@ public class AddExpenses extends AppCompatActivity {
     //save amount to
     public void split_to_database(ArrayList<String> Temp_userlist, double split_amount){
 
+        Date date = new Date();
         ArrayList<String> splituser_id_list =  find_user_id(Temp_userlist);
         splituser_id_list.add(0,userInfo.getUid());
 
@@ -274,11 +276,13 @@ public class AddExpenses extends AppCompatActivity {
             subactivity.setPayerId(splituser_id_list.get(0));
             subactivity.setOwnerId(splituser_id_list.get(i));
             subactivity.setAmount(split_amount);
+            subactivity.setCreatedDate(date);
             subactivity_List.add(subactivity);
         }
         mainactivity.setSubActivityList(subactivity_List);
         mainactivity.setName(expenses_name.getText().toString());
         mainactivity.setId(UUID.randomUUID().toString());
+        mainactivity.setCreatedDate(date);
 
         double amounts;
         String temp_amount =amount.getText().toString();
