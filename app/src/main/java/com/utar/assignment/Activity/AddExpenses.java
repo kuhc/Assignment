@@ -107,26 +107,27 @@ public class AddExpenses extends AppCompatActivity {
 
                 //group list
                 CollectionReference groupRef = db.collection("Group_1");
-                groupRef.whereIn("groupId", userInfo.getGroupList()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        group=task.getResult().toObjects(Group.class);
+                if(userInfo.getGroupList()!=null) {
+                    groupRef.whereIn("groupId", userInfo.getGroupList()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            group=task.getResult().toObjects(Group.class);
 
-                        List<String> supplierNames = new ArrayList<>();
-                        for(int i = 0; i<group.size();i++){
-                            supplierNames.add(group.get(i).getGroupName());
+                            List<String> supplierNames = new ArrayList<>();
+                            for(int i = 0; i<group.size();i++){
+                                supplierNames.add(group.get(i).getGroupName());
+                            }
+
+                            ArrayAdapter<String> grouplist = new ArrayAdapter<String>
+                                    (AddExpenses.this, android.R.layout.simple_list_item_1,supplierNames);
+                            grouplist.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            groups.setAdapter(grouplist);
+
+                            spinner_listener();
                         }
 
-                        ArrayAdapter<String> grouplist = new ArrayAdapter<String>
-                                (AddExpenses.this, android.R.layout.simple_list_item_1,supplierNames);
-                        grouplist.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        groups.setAdapter(grouplist);
-
-                        spinner_listener();
-                    }
-
-                });
-
+                    });
+                }
             }
         });
 

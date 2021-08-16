@@ -116,6 +116,9 @@ public class FriendFragment extends Fragment {
                                     List<User> userList2 = new ArrayList<>();
                                     userList2=task.getResult().toObjects(User.class);
 
+                                    if(userInfo.getAmountList()==null){
+                                        userInfo.setAmountList(new ArrayList<Amount>());
+                                    }
                                     List<Amount> amountList = userInfo.getAmountList();
                                     for(int i=0; i<amountList.size(); i++) {
                                         amountListOwner.add(amountList.get(i).getOwnerId());
