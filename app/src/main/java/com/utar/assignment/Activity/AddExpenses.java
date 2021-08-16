@@ -46,13 +46,13 @@ import java.util.UUID;
 
 public class AddExpenses extends AppCompatActivity {
 
-    private Button btn_adduser,btn_split,btn_cancel,btn_split_unequally;
+    private Button btn_split,btn_cancel,btn_split_unequally;
     private ChipGroup chipGroup;
     private TextView result;
     private int split_user_count =0;
     private double temp_result=0;
     private EditText amount,expenses_name;
-    private AutoCompleteTextView user_share;
+    //private AutoCompleteTextView user_share;
     private Spinner groups;
     SplitCalHelper sh = new SplitCalHelper();
 
@@ -128,8 +128,6 @@ public class AddExpenses extends AppCompatActivity {
 
             }
         });
-
-
 
 
         //amount has been type

@@ -19,43 +19,28 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:src="@drawable/ic_add"/>
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profile_imgProfile"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="32dp"
-        android:src="@drawable/ic_launcher_background"
-        app:civ_border_color="#FF000000"
-        app:civ_border_width="2dp"
-        app:elevation="100dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.16"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023" />
-
     <TextView
         android:id="@+id/home_overall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-smallcaps"
         android:text="Overall"
-        android:textSize="30sp"
+        android:textSize="50sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.827"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.064" />
+        app:layout_constraintVertical_bias="0.067" />
 
     <TextView
         android:id="@+id/home_overall_amount"
-        android:layout_width="84dp"
-        android:layout_height="38dp"
+        android:layout_width="337dp"
+        android:layout_height="61dp"
         android:layout_marginTop="32dp"
-        android:textSize="15px"
+        android:foregroundGravity="center"
+        android:gravity="center_horizontal"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="@+id/home_overall"
         app:layout_constraintHorizontal_bias="0.48"
         app:layout_constraintStart_toStartOf="@+id/home_overall"
