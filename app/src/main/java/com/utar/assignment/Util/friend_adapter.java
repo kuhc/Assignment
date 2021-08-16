@@ -55,7 +55,7 @@ public class friend_adapter extends RecyclerView.Adapter<friend_adapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull  friend_adapter.ViewHolder holder, int position) {
 
-        User user = userList.get(position);
+        //User user = userList.get(position);
         holder.txtName.setText(listOwnerUsername.get(position));
         double amount = amountList.get(position).getAmount();
         String amountST = Double.toString(amount);
