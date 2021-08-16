@@ -7,7 +7,7 @@ public class MainActivity implements Comparable<MainActivity> {
     private String Id;
     private String name;
     private double billAmount;
-    private Date createdDate;
+    private String createdDate;
     private List<SubActivity> subActivityList;
 
     public MainActivity() {
@@ -45,11 +45,11 @@ public class MainActivity implements Comparable<MainActivity> {
         this.billAmount = billAmount;
     }
 
-    public Date getCreatedDate() {
+    public String getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Date createdDate) {
+    public void setCreatedDate(String createdDate) {
         this.createdDate = createdDate;
     }
 

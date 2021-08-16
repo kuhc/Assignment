@@ -39,6 +39,7 @@ import com.utar.assignment.Util.FirestoreHelper;
 import com.utar.assignment.Util.GeneralHelper;
 import com.utar.assignment.Util.SplitCalHelper;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -259,6 +260,7 @@ public class AddExpenses extends AppCompatActivity {
     public void split_to_database(ArrayList<String> Temp_userlist, double split_amount){
 
         Date date = new Date();
+        String str_date = new SimpleDateFormat("yyyy-MM-dd").format(date);
         ArrayList<String> splituser_id_list =  find_user_id(Temp_userlist);
         splituser_id_list.add(0,userInfo.getUid());
 
@@ -283,7 +285,7 @@ public class AddExpenses extends AppCompatActivity {
         mainactivity.setSubActivityList(subactivity_List);
         mainactivity.setName(expenses_name.getText().toString());
         mainactivity.setId(UUID.randomUUID().toString());
-        mainactivity.setCreatedDate(date);
+        mainactivity.setCreatedDate(str_date);
 
         double amounts;
         String temp_amount =amount.getText().toString();
