@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -35,6 +36,7 @@ public class specified_group extends AppCompatActivity {
 FirebaseFirestore db;
 FirebaseAuth fAuth;
 TextView group_name;
+Button hp_button1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +44,7 @@ TextView group_name;
         fAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         leavebut1=findViewById(R.id.leave_but);
+        hp_button1=findViewById(R.id.home_but);
         group_name=findViewById(R.id.specified_group_name);
         recycle_main_activity1=findViewById(R.id.recycle_main_activity);
 
@@ -49,7 +52,14 @@ TextView group_name;
 
 group_name.setText(getIntent().getStringExtra("name"));
 
+        hp_button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(specified_group.this, com.utar.assignment.Activity.MainActivity.class);
 
+                startActivity(intent);
+            }
+        });
         leavebut1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,12 +111,17 @@ db.collection("Group_1").document(getIntent().getStringExtra("g_id")).get()
             @Override
             public void onComplete(@NonNull  Task<DocumentSnapshot> task) {
                 Group group = task.getResult().toObject(Group.class);
-                List<MainActivity> mainact = group.getMainActivityList();
+                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                if(group.getMainActivityList()!=null)
+                {
+                    List<MainActivity> mainact = group.getMainActivityList();
 
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(specified_group.this);
-                recycle_main_activity1.setLayoutManager(linearLayoutManager);
-                main_act_adapter adapter= new main_act_adapter( specified_group.this,mainact,getIntent().getStringExtra("g_id"));
-                recycle_main_activity1.setAdapter(adapter);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(specified_group.this);
+                    recycle_main_activity1.setLayoutManager(linearLayoutManager);
+                    main_act_adapter adapter= new main_act_adapter( specified_group.this,mainact,getIntent().getStringExtra("g_id"));
+                    recycle_main_activity1.setAdapter(adapter);
+                }
+
 
 
             }

@@ -79,8 +79,9 @@ db.collection("Group_1").document(get_group_id).get().addOnCompleteListener(new 
                 for(int z=0;z<sub.size();z++)
                 {
  // Toast.makeText(sub_activity.this,  sub.get(z).getPayerId()+" --- OWN --- "+sub.get(z).getOwnerId() +" "+sub.get(z).getAmount(), Toast.LENGTH_SHORT).show();
-                    idList.add(sub.get(z).getPayerId());
                     idList.add(sub.get(z).getOwnerId());
+                    idList.add(sub.get(z).getPayerId());
+
 
 
 
