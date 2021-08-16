@@ -55,6 +55,8 @@ public class HomeFragment  extends Fragment {
     private TextView overall,owe;
     private User userInfo;
     double amount;
+    String temp_username;
+
 
     //firebase
     FirebaseFirestore db;
@@ -136,9 +138,10 @@ public class HomeFragment  extends Fragment {
                             }
 
                             Collections.sort(mainActivity_list_all);
+
                             //Collections.sort(mainActivity_list_all, (o1, o2) -> o2.getCreatedDate().compareTo(o1.getCreatedDate()));
 
-                            for (int j = 0; j<5;j++){
+                            for (int j = 0; j<mainActivity_list_all.size();j++){
 
                                 List<SubActivity> subActivity_list = mainActivity_list_all.get(j).getSubActivityList();
 
@@ -146,77 +149,106 @@ public class HomeFragment  extends Fragment {
 
                                     //if current user involve in this activity.
                                     if(subActivity_list.get(x).getOwnerId().matches(userInfo.getUid()) ){
-                                        LinearLayout ll_h = new LinearLayout(getActivity());
-                                        ll_h.setOrientation(LinearLayout.HORIZONTAL);
-                                        TextView tv = new TextView(getActivity());
-                                        tv.setId(tv.generateViewId());
-                                        tv.setHeight(200);
-                                        tv.setWidth(300);
-                                        tv.setTextSize(20);
-                                        tv.setText(mainActivity_list_all.get(j).getName());
 
-                                        TextView tv_amount = new TextView(getActivity());
-                                        tv_amount.setId(tv.generateViewId());
-                                        tv_amount.setHeight(100);
-                                        tv_amount.setWidth(250);
-                                        tv_amount.setTextColor(Color.RED);
-                                        tv_amount.setText("RM "+subActivity_list.get(x).getAmount());
+                                        db = FirebaseFirestore.getInstance();
+                                        DocumentReference documentReference =db.collection("Users").document(subActivity_list.get(x).getPayerId());
+                                        int finalX = x;
+                                        int finalJ = j;
+                                        documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                User user = documentSnapshot.toObject(User.class);
+                                                temp_username = user.getUsername();
 
-                                        TextView tv_username = new TextView(getActivity());
-                                        tv_username.setId(tv.generateViewId());
-                                        tv_username.setHeight(100);
-                                        tv_username.setWidth(250);
-                                        tv_username.setText(get_user_username(subActivity_list.get(x).getPayerId()));
+                                                LinearLayout ll_h = new LinearLayout(getActivity());
+                                                ll_h.setOrientation(LinearLayout.HORIZONTAL);
+                                                TextView tv = new TextView(getActivity());
+                                                tv.setId(tv.generateViewId());
+                                                tv.setHeight(200);
+                                                tv.setWidth(300);
+                                                tv.setTextSize(20);
+                                                tv.setText(mainActivity_list_all.get(finalJ).getName());
 
-                                        TextView tv_date = new TextView(getActivity());
-                                        tv_date.setId(tv.generateViewId());
-                                        tv_date.setHeight(100);
-                                        if(subActivity_list.get(x).getCreatedDate() !=null){
-                                            tv_date.setText(formatter.format(subActivity_list.get(x).getCreatedDate()));
-                                        }
-                                        ll_h.addView(tv);
-                                        ll_h.addView(tv_username);
-                                        ll_h.addView(tv_amount);
-                                        ll_h.addView(tv_date);
-                                        ll.addView(ll_h);
+                                                TextView tv_amount = new TextView(getActivity());
+                                                tv_amount.setId(tv.generateViewId());
+                                                tv_amount.setHeight(100);
+                                                tv_amount.setWidth(250);
+                                                tv_amount.setTextColor(Color.RED);
+                                                tv_amount.setText("RM "+subActivity_list.get(finalX).getAmount());
+
+                                                TextView tv_username = new TextView(getActivity());
+                                                tv_username.setId(tv.generateViewId());
+                                                tv_username.setHeight(100);
+                                                tv_username.setWidth(250);
+                                                tv_username.setText(temp_username);
+
+                                                TextView tv_date = new TextView(getActivity());
+                                                tv_date.setId(tv.generateViewId());
+                                                tv_date.setHeight(100);
+                                                if(subActivity_list.get(finalX).getCreatedDate() !=null){
+                                                    tv_date.setText(formatter.format(subActivity_list.get(finalX).getCreatedDate()));
+                                                }
+                                                ll_h.addView(tv);
+                                                ll_h.addView(tv_username);
+                                                ll_h.addView(tv_amount);
+                                                ll_h.addView(tv_date);
+                                                ll.addView(ll_h);
+                                            }
+                                        });
+
+
                                     }
 
                                     if(subActivity_list.get(x).getPayerId().matches(userInfo.getUid())){
-                                        LinearLayout ll_h = new LinearLayout(getActivity());
-                                        ll_h.setOrientation(LinearLayout.HORIZONTAL);
 
-                                        TextView tv = new TextView(getActivity());
-                                        tv.setId(tv.generateViewId());
-                                        tv.setHeight(200);
-                                        tv.setWidth(300);
-                                        tv.setTextSize(20);
-                                        tv.setText(mainActivity_list_all.get(j).getName());
+                                        db = FirebaseFirestore.getInstance();
+                                        DocumentReference documentReference =db.collection("Users").document(subActivity_list.get(x).getOwnerId());
+                                        int finalJ1 = j;
+                                        int finalX1 = x;
+                                        documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                User user = documentSnapshot.toObject(User.class);
+                                                temp_username = user.getUsername();
 
-                                        TextView tv_username = new TextView(getActivity());
-                                        tv_username.setId(tv.generateViewId());
-                                        tv_username.setHeight(100);
-                                        tv_username.setWidth(250);
-                                        tv_username.setText(get_user_username(subActivity_list.get(x).getOwnerId()));
+                                                LinearLayout ll_h = new LinearLayout(getActivity());
+                                                ll_h.setOrientation(LinearLayout.HORIZONTAL);
 
-                                        TextView tv_amount = new TextView(getActivity());
-                                        tv_amount.setId(tv.generateViewId());
-                                        tv_amount.setHeight(100);
-                                        tv_amount.setWidth(250);
-                                        tv_amount.setTextColor(Color.GREEN);
-                                        tv_amount.setText("RM "+subActivity_list.get(x).getAmount());
+                                                TextView tv = new TextView(getActivity());
+                                                tv.setId(tv.generateViewId());
+                                                tv.setHeight(200);
+                                                tv.setWidth(300);
+                                                tv.setTextSize(20);
+                                                tv.setText(mainActivity_list_all.get(finalJ1).getName());
 
-                                        TextView tv_date = new TextView(getActivity());
-                                        tv_date.setId(tv.generateViewId());
-                                        tv_date.setHeight(100);
-                                        if(subActivity_list.get(x).getCreatedDate() !=null){
-                                            tv_date.setText(formatter.format(subActivity_list.get(x).getCreatedDate()));
-                                        }
+                                                TextView tv_username = new TextView(getActivity());
+                                                tv_username.setId(tv.generateViewId());
+                                                tv_username.setHeight(100);
+                                                tv_username.setWidth(250);
+                                                tv_username.setText(temp_username);
 
-                                        ll_h.addView(tv);
-                                        ll_h.addView(tv_username);
-                                        ll_h.addView(tv_amount);
-                                        ll_h.addView(tv_date);
-                                        ll.addView(ll_h);
+                                                TextView tv_amount = new TextView(getActivity());
+                                                tv_amount.setId(tv.generateViewId());
+                                                tv_amount.setHeight(100);
+                                                tv_amount.setWidth(250);
+                                                tv_amount.setTextColor(Color.GREEN);
+                                                tv_amount.setText("RM "+subActivity_list.get(finalX1).getAmount());
+
+                                                TextView tv_date = new TextView(getActivity());
+                                                tv_date.setId(tv.generateViewId());
+                                                tv_date.setHeight(100);
+                                                if(subActivity_list.get(finalX1).getCreatedDate() !=null){
+                                                    tv_date.setText(formatter.format(subActivity_list.get(finalX1).getCreatedDate()));
+                                                }
+
+                                                ll_h.addView(tv);
+                                                ll_h.addView(tv_username);
+                                                ll_h.addView(tv_amount);
+                                                ll_h.addView(tv_date);
+                                                ll.addView(ll_h);
+                                            }
+                                        });
+
                                     }
                                 }
 
@@ -252,20 +284,9 @@ public class HomeFragment  extends Fragment {
 
 
     public String get_user_username(String userid){
-        String temp_username = "userid";
 
 
-       /* db = FirebaseFirestore.getInstance();
-        DocumentReference documentReference =db.collection("Users").document(userid);
-        documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                User user = documentSnapshot.toObject(User.class);
-                temp_username = user.getUsername();
 
-
-            }
-        });*/
 
         return temp_username;
     }

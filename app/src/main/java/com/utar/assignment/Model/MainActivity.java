@@ -55,9 +55,7 @@ public class MainActivity implements Comparable<MainActivity> {
 
     @Override
     public int compareTo(MainActivity o) {
-        if (getCreatedDate() == null || o.getCreatedDate() == null){
-            return 1;
-        }
+
         return getCreatedDate().compareTo(o.getCreatedDate());
     }
 }
