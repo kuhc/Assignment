@@ -17,7 +17,7 @@
         <activity android:name=".Activity.AddFriend" />
         <activity android:name=".Activity.specified_group" />
         <activity android:name=".Activity.settleBill" />
-        <activity android:name=".Activity.LoginActivity">
+        <activity android:name=".Activity.LoginActivity" android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,5 +27,4 @@
         <activity android:name=".Activity.RegisterActivity" />
         <activity android:name=".Activity.MainActivity" />
     </application>
-
 </manifest>
