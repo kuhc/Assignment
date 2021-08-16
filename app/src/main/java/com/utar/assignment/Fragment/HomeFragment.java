@@ -112,6 +112,7 @@ public class HomeFragment  extends Fragment {
                     overall.setTextColor(Color.GREEN);
                     owe.setText("Owe you");
                 }
+                amount = Math.round(amount * 100.0) / 100.0;
 
                 overall.setText("RM "+ amount);
                 LinearLayout ll = view.findViewById(R.id.home_expenses_list);
@@ -283,12 +284,30 @@ public class HomeFragment  extends Fragment {
 
 
 
-    public String get_user_username(String userid){
+    public String PerfectDecimal(String str, int MAX_BEFORE_POINT, int MAX_DECIMAL) {
+        if (str.charAt(0) == '.') str = "0" + str;
+        int max = str.length();
 
-
-
-
-        return temp_username;
+        String rFinal = "";
+        boolean after = false;
+        int i = 0, up = 0, decimal = 0;
+        char t;
+        while (i < max) {
+            t = str.charAt(i);
+            if (t != '.' && after == false) {
+                up++;
+                if (up > MAX_BEFORE_POINT) return rFinal;
+            } else if (t == '.') {
+                after = true;
+            } else {
+                decimal++;
+                if (decimal > MAX_DECIMAL)
+                    return rFinal;
+            }
+            rFinal = rFinal + t;
+            i++;
+        }
+        return rFinal;
     }
 
 
