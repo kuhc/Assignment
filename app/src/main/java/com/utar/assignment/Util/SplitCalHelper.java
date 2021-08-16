@@ -1,6 +1,7 @@
 package com.utar.assignment.Util;
 
 import android.content.Context;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -175,8 +176,84 @@ public class SplitCalHelper {
 
     }
 
-    public void clear_bill(String owner_id, String payer_id,double amount){
+    public void clear_bill(String owner_id, String payer_id, double amount, Context context, TextView amounttopay){
+        FirebaseFirestore db;
+        db = FirebaseFirestore.getInstance();
+        DocumentReference documentReference = db.collection("Users").document(owner_id);
+        documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User user = documentSnapshot.toObject(User.class);
+                List<Amount> amountList = user.getAmountList();
 
+                for(int i=0; i<amountList.size();i++)
+                {
+                    String getOwnerid=  amountList.get(i).getOwnerId();
+                    if(getOwnerid.equals(payer_id))
+                    {
+                        GeneralHelper.showMessage(context,"This is the number " + i + " " + amountList.get(i).getAmount());
+                        double exitingAmount = amountList.get(i).getAmount();
+                        if( exitingAmount< 0)
+                        {
+                            double newAmount = exitingAmount+amount;
+                            user.getAmountList().get(i).setAmount(newAmount);
+                        }
+                        else if (exitingAmount >0)
+                        {
+                            double newAmount = exitingAmount - amount;
+                            user.getAmountList().get(i).setAmount(newAmount);
+                        }
+                    }
+                   //GeneralHelper.showMessage(context,"This is the number " + i + amountList.get(i).getAmount() + " getOwmerID :" + amountList.get(i).getOwnerId() + " owner_id : " + owner_id) ;
+                }
+                FirestoreHelper.setUser(user, new FirebaseCallback() {
+                    @Override
+                    public void onResponse() {
+
+                    }
+                });
+            }
+        });
+
+        DocumentReference documentReference2 = db.collection("Users").document(payer_id);
+        documentReference2.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User user = documentSnapshot.toObject(User.class);
+                List<Amount> amountList = user.getAmountList();
+
+                for(int i=0; i<amountList.size();i++)
+                {
+                    String getPayerid=  amountList.get(i).getOwnerId();
+                    if(getPayerid.equals(owner_id))
+                    {
+                        GeneralHelper.showMessage(context,"This is the number2  " + i + " " + amountList.get(i).getAmount());
+                        double exitingAmount = amountList.get(i).getAmount();
+                        if( exitingAmount< 0)
+                        {
+                            double newAmount = exitingAmount+amount;
+                            String newAmountString = String.valueOf(newAmount);
+                            user.getAmountList().get(i).setAmount(newAmount);
+                            amounttopay.setText(newAmountString);
+                        }
+                        else if (exitingAmount >0)
+                        {
+                            double newAmount = exitingAmount - amount;
+                            String newAmountString = String.valueOf(newAmount);
+                            user.getAmountList().get(i).setAmount(newAmount);
+                            amounttopay.setText(newAmountString);
+                        }
+                    }
+                    FirestoreHelper.setUser(user, new FirebaseCallback() {
+                        @Override
+                        public void onResponse() {
+
+                        }
+                    });
+                    //GeneralHelper.showMessage(context,"This is the number " + i + amountList.get(i).getAmount() + " getOwmerID :" + amountList.get(i).getOwnerId() + " owner_id : " + owner_id) ;
+                }
+            }
+        });
     }
 
 }

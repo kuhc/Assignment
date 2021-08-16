@@ -47,6 +47,8 @@ public class FriendFragment extends Fragment {
     private static FirebaseFirestore fStore = FirebaseFirestore.getInstance();
     private FirebaseAuth Auth;
     FirebaseFirestore db;
+    List<String> amountListOwner = new ArrayList<>();
+    List<String> listOwnerUsername = new ArrayList<>();
 
     private User userInfo;
     TextView username;
@@ -107,6 +109,8 @@ public class FriendFragment extends Fragment {
                     String fNo1 = Integer.toString(fNo);
                     friendNo.setText(fNo1);
 
+
+
                     db.collection("Users").whereIn("email",userList).get()
                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                 @Override
@@ -114,113 +118,47 @@ public class FriendFragment extends Fragment {
                                     List<User> userList2 = new ArrayList<>();
                                     userList2=task.getResult().toObjects(User.class);
 
-                                    List<String> amounts = new ArrayList<>();
-                                    amounts.add("100");
-                                    amounts.add("200");
-                                    amounts.add("300");
                                     List<Amount> amountList = userInfo.getAmountList();
+                                    for(int i=0; i<amountList.size(); i++) {
+                                        amountListOwner.add(amountList.get(i).getOwnerId());
+                                        //GeneralHelper.showMessage(getContext(), "this is owner :" + amountListOwner);
 
+                                        List<User> finalUserList = userList2;
+                                        int finalI = i;
+                                        db.collection("Users").document(amountListOwner.get(i)).get()
+                                                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                        User user2 = task.getResult().toObject(User.class);
+                                                        listOwnerUsername.add(user2.getUsername());
 
-                                    initializeRecycleView(userList2, amounts,userList,uid, getActivity());
+                                                        if (finalI == amountList.size()-1) {
+                                                            initializeRecycleView(finalUserList, amountList, userList, uid, amountListOwner, listOwnerUsername, getActivity());
+                                                        }
+                                                    }
+                                                });
+                                    }
                                 }
-
                             });
+                    }
                 }
 
-            }
         });
+
         return view;
     }
 
-    public void initializeRecycleView (List<User> user, List<String> amount, List<String> userFriendList, String uid, Context context)
+    public void initializeRecycleView (List<User> user, List<Amount> amount, List<String> userFriendList, String uid,List<String> amountListOwner, List<String> listOwnerUsername, Context context)
     {
         RecyclerView recyclerView;
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setReverseLayout(true);
-        layoutManager.setStackFromEnd(true);
+        //layoutManager.setReverseLayout(true);
+        //layoutManager.setStackFromEnd(true);
         recyclerView = view.findViewById(R.id.friendList);
         recyclerView.setLayoutManager(layoutManager);
 
         friend_adapter adapter;
-        adapter= new friend_adapter(user,amount,userFriendList,uid,getActivity());
+        adapter= new friend_adapter(user,amount,userFriendList,uid,amountListOwner,listOwnerUsername,context);
         recyclerView.setAdapter(adapter);
     }
-
-    /*public void initializeListView(User userInfo, List<String> userList) {
-
-        FirebaseUser user;
-        user = Auth.getInstance().getCurrentUser();
-        String uid = user.getUid();
-
-        listView = view.findViewById(R.id.friendList);
-        ArrayAdapter arrayAdapter;
-        ArrayList<String> email = new ArrayList<>(userList);
-        arrayAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, email);
-        listView.setAdapter(arrayAdapter);
-        arrayAdapter.notifyDataSetChanged();
-
-         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            PopupMenu popupMenu = new PopupMenu(getContext(),view);
-            popupMenu.getMenuInflater().inflate(R.menu.friend_menu,popupMenu.getMenu());
-
-            GeneralHelper.showMessage(getContext(),"The unsettled amount with " + email.get(position) + " is " );
-
-            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-
-                    switch (item.getItemId()) {
-                        case R.id.settle_bill:
-
-                            GeneralHelper.showMessage(getContext(), "You have settled bill with " + email.get(position));
-
-                            break;
-
-                        case R.id.delete_friend:
-
-                            List<String> newUserList = userList;
-                            newUserList.remove(position);
-                            GeneralHelper.showMessage(getContext(), "You have remove friend with email : " + email.get(position));
-
-                            FirestoreHelper.addFriend(uid, newUserList, new FirebaseCallback() {
-                                @Override
-                                public void onResponse() {
-                                    GeneralHelper.showMessage(getContext(), "Successfully Deleted!");
-
-                                    Intent intent = new Intent(getContext(),MainActivity.class);
-                                    startActivity(intent);
-
-                                    arrayAdapter.notifyDataSetChanged();
-                                }
-                            });
-                            break;
-
-
-                    }
-                    return true;
-                }
-            });
-            popupMenu.show();
-
-        }
-    });
-}*/
-
-    /*private void initializeRecycleView(List<String> userList) {
-
-        LinearLayoutManager layoutManager =
-                //new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL,false);
-                new LinearLayoutManager(getContext());
-
-        recyclerView = (RecyclerView) view.findViewById(R.id.freindList);
-        recyclerView.setLayoutManager(layoutManager);
-
-        adapter = new friendListAdapter(getContext(),userList);
-        recyclerView.setAdapter(adapter);
-        GeneralHelper.showMessage(getContext(),"The no of friend: " + userList);
-
-    }*/
-
 }
