@@ -90,6 +90,9 @@ public class HomeFragment  extends Fragment {
                 SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM");
 
                 userInfo = documentSnapshot.toObject(User.class);
+                if (userInfo.getAmountList()==null){
+                    userInfo.setAmountList(new ArrayList<Amount>());
+                }
 
                 for(int i = 0;i<userInfo.getAmountList().size();i++){
 
@@ -113,114 +116,116 @@ public class HomeFragment  extends Fragment {
 
                 //get all sub activity
                 CollectionReference groupRef = db.collection("Group_1");
-                groupRef.whereIn("groupId", userInfo.getGroupList()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        group_list=task.getResult().toObjects(Group.class);
+                if(userInfo.getGroupList()!=null) {
+                    groupRef.whereIn("groupId", userInfo.getGroupList()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            group_list=task.getResult().toObjects(Group.class);
 
-                        for(int i = 0; i<group_list.size();i++){
+                            for(int i = 0; i<group_list.size();i++){
 
-                            if(group_list.get(i).getMainActivityList() == null){
-                                continue;
-                            }else{
-                                for(int j = 0; j<group_list.get(i).getMainActivityList().size();j++){
+                                if(group_list.get(i).getMainActivityList() == null){
+                                    continue;
+                                }else{
+                                    for(int j = 0; j<group_list.get(i).getMainActivityList().size();j++){
 
-                                    mainActivity_list_all.add(group_list.get(i).getMainActivityList().get(j));
+                                        mainActivity_list_all.add(group_list.get(i).getMainActivityList().get(j));
+                                    }
                                 }
+
+                            }
+
+                            Collections.sort(mainActivity_list_all);
+                            //Collections.sort(mainActivity_list_all, (o1, o2) -> o2.getCreatedDate().compareTo(o1.getCreatedDate()));
+
+                            for (int j = 0; j<5;j++){
+
+                                List<SubActivity> subActivity_list = mainActivity_list_all.get(j).getSubActivityList();
+
+                                for(int x = 0; x<subActivity_list.size();x++){
+
+                                    //if current user involve in this activity.
+                                    if(subActivity_list.get(x).getOwnerId().matches(userInfo.getUid()) ){
+                                        LinearLayout ll_h = new LinearLayout(getActivity());
+                                        ll_h.setOrientation(LinearLayout.HORIZONTAL);
+                                        TextView tv = new TextView(getActivity());
+                                        tv.setId(tv.generateViewId());
+                                        tv.setHeight(200);
+                                        tv.setWidth(300);
+                                        tv.setTextSize(20);
+                                        tv.setText(mainActivity_list_all.get(j).getName());
+
+                                        TextView tv_amount = new TextView(getActivity());
+                                        tv_amount.setId(tv.generateViewId());
+                                        tv_amount.setHeight(100);
+                                        tv_amount.setWidth(250);
+                                        tv_amount.setTextColor(Color.RED);
+                                        tv_amount.setText("RM "+subActivity_list.get(x).getAmount());
+
+                                        TextView tv_username = new TextView(getActivity());
+                                        tv_username.setId(tv.generateViewId());
+                                        tv_username.setHeight(100);
+                                        tv_username.setWidth(250);
+                                        tv_username.setText(get_user_username(subActivity_list.get(x).getPayerId()));
+
+                                        TextView tv_date = new TextView(getActivity());
+                                        tv_date.setId(tv.generateViewId());
+                                        tv_date.setHeight(100);
+                                        if(subActivity_list.get(x).getCreatedDate() !=null){
+                                            tv_date.setText(formatter.format(subActivity_list.get(x).getCreatedDate()));
+                                        }
+                                        ll_h.addView(tv);
+                                        ll_h.addView(tv_username);
+                                        ll_h.addView(tv_amount);
+                                        ll_h.addView(tv_date);
+                                        ll.addView(ll_h);
+                                    }
+
+                                    if(subActivity_list.get(x).getPayerId().matches(userInfo.getUid())){
+                                        LinearLayout ll_h = new LinearLayout(getActivity());
+                                        ll_h.setOrientation(LinearLayout.HORIZONTAL);
+
+                                        TextView tv = new TextView(getActivity());
+                                        tv.setId(tv.generateViewId());
+                                        tv.setHeight(200);
+                                        tv.setWidth(300);
+                                        tv.setTextSize(20);
+                                        tv.setText(mainActivity_list_all.get(j).getName());
+
+                                        TextView tv_username = new TextView(getActivity());
+                                        tv_username.setId(tv.generateViewId());
+                                        tv_username.setHeight(100);
+                                        tv_username.setWidth(250);
+                                        tv_username.setText(get_user_username(subActivity_list.get(x).getOwnerId()));
+
+                                        TextView tv_amount = new TextView(getActivity());
+                                        tv_amount.setId(tv.generateViewId());
+                                        tv_amount.setHeight(100);
+                                        tv_amount.setWidth(250);
+                                        tv_amount.setTextColor(Color.GREEN);
+                                        tv_amount.setText("RM "+subActivity_list.get(x).getAmount());
+
+                                        TextView tv_date = new TextView(getActivity());
+                                        tv_date.setId(tv.generateViewId());
+                                        tv_date.setHeight(100);
+                                        if(subActivity_list.get(x).getCreatedDate() !=null){
+                                            tv_date.setText(formatter.format(subActivity_list.get(x).getCreatedDate()));
+                                        }
+
+                                        ll_h.addView(tv);
+                                        ll_h.addView(tv_username);
+                                        ll_h.addView(tv_amount);
+                                        ll_h.addView(tv_date);
+                                        ll.addView(ll_h);
+                                    }
+                                }
+
                             }
 
                         }
 
-                        Collections.sort(mainActivity_list_all);
-                        //Collections.sort(mainActivity_list_all, (o1, o2) -> o2.getCreatedDate().compareTo(o1.getCreatedDate()));
-
-                        for (int j = 0; j<5;j++){
-
-                            List<SubActivity> subActivity_list = mainActivity_list_all.get(j).getSubActivityList();
-
-                            for(int x = 0; x<subActivity_list.size();x++){
-
-                                //if current user involve in this activity.
-                                if(subActivity_list.get(x).getOwnerId().matches(userInfo.getUid()) ){
-                                    LinearLayout ll_h = new LinearLayout(getActivity());
-                                    ll_h.setOrientation(LinearLayout.HORIZONTAL);
-                                    TextView tv = new TextView(getActivity());
-                                    tv.setId(tv.generateViewId());
-                                    tv.setHeight(200);
-                                    tv.setWidth(300);
-                                    tv.setTextSize(20);
-                                    tv.setText(mainActivity_list_all.get(j).getName());
-
-                                    TextView tv_amount = new TextView(getActivity());
-                                    tv_amount.setId(tv.generateViewId());
-                                    tv_amount.setHeight(100);
-                                    tv_amount.setWidth(250);
-                                    tv_amount.setTextColor(Color.RED);
-                                    tv_amount.setText("RM "+subActivity_list.get(x).getAmount());
-
-                                    TextView tv_username = new TextView(getActivity());
-                                    tv_username.setId(tv.generateViewId());
-                                    tv_username.setHeight(100);
-                                    tv_username.setWidth(250);
-                                    tv_username.setText(get_user_username(subActivity_list.get(x).getPayerId()));
-
-                                    TextView tv_date = new TextView(getActivity());
-                                    tv_date.setId(tv.generateViewId());
-                                    tv_date.setHeight(100);
-                                    if(subActivity_list.get(x).getCreatedDate() !=null){
-                                        tv_date.setText(formatter.format(subActivity_list.get(x).getCreatedDate()));
-                                    }
-                                    ll_h.addView(tv);
-                                    ll_h.addView(tv_username);
-                                    ll_h.addView(tv_amount);
-                                    ll_h.addView(tv_date);
-                                    ll.addView(ll_h);
-                                }
-
-                                if(subActivity_list.get(x).getPayerId().matches(userInfo.getUid())){
-                                    LinearLayout ll_h = new LinearLayout(getActivity());
-                                    ll_h.setOrientation(LinearLayout.HORIZONTAL);
-
-                                    TextView tv = new TextView(getActivity());
-                                    tv.setId(tv.generateViewId());
-                                    tv.setHeight(200);
-                                    tv.setWidth(300);
-                                    tv.setTextSize(20);
-                                    tv.setText(mainActivity_list_all.get(j).getName());
-
-                                    TextView tv_username = new TextView(getActivity());
-                                    tv_username.setId(tv.generateViewId());
-                                    tv_username.setHeight(100);
-                                    tv_username.setWidth(250);
-                                    tv_username.setText(get_user_username(subActivity_list.get(x).getOwnerId()));
-
-                                    TextView tv_amount = new TextView(getActivity());
-                                    tv_amount.setId(tv.generateViewId());
-                                    tv_amount.setHeight(100);
-                                    tv_amount.setWidth(250);
-                                    tv_amount.setTextColor(Color.GREEN);
-                                    tv_amount.setText("RM "+subActivity_list.get(x).getAmount());
-
-                                    TextView tv_date = new TextView(getActivity());
-                                    tv_date.setId(tv.generateViewId());
-                                    tv_date.setHeight(100);
-                                    if(subActivity_list.get(x).getCreatedDate() !=null){
-                                        tv_date.setText(formatter.format(subActivity_list.get(x).getCreatedDate()));
-                                    }
-
-                                    ll_h.addView(tv);
-                                    ll_h.addView(tv_username);
-                                    ll_h.addView(tv_amount);
-                                    ll_h.addView(tv_date);
-                                    ll.addView(ll_h);
-                                }
-                            }
-
-                        }
-
-                    }
-
-                });   //End get all sub activity
+                    });   //End get all sub activity
+                }
                 
             }
 

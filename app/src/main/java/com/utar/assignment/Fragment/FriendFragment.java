@@ -100,7 +100,7 @@ public class FriendFragment extends Fragment {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 userInfo = documentSnapshot.toObject(User.class);
 
-                if (userInfo.getFriendList().size() == 0) {
+                if (userInfo.getFriendList() == null) {
                     GeneralHelper.showMessage(getContext(), "There is no existing friend!");
                 }
                 else if(userInfo.getFriendList()!= null) {
