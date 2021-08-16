@@ -28,7 +28,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.utar.assignment.Activity.AddExpenses;
 import com.utar.assignment.Model.Amount;
@@ -86,9 +88,10 @@ public class HomeFragment  extends Fragment {
         //get user overall amount
         db = FirebaseFirestore.getInstance();
         DocumentReference documentReference =db.collection("Users").document(uid);
-        documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+
+        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException error) {
                 SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM");
 
                 userInfo = documentSnapshot.toObject(User.class);
@@ -115,7 +118,9 @@ public class HomeFragment  extends Fragment {
                 amount = Math.round(amount * 100.0) / 100.0;
 
                 overall.setText("RM "+ amount);
+
                 LinearLayout ll = view.findViewById(R.id.home_expenses_list);
+                ll.removeAllViews();
 
                 //get all sub activity
                 CollectionReference groupRef = db.collection("Group_1");
@@ -155,6 +160,7 @@ public class HomeFragment  extends Fragment {
                                         DocumentReference documentReference =db.collection("Users").document(subActivity_list.get(x).getPayerId());
                                         int finalX = x;
                                         int finalJ = j;
+
                                         documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                             @Override
                                             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -196,12 +202,10 @@ public class HomeFragment  extends Fragment {
                                                 ll.addView(ll_h);
                                             }
                                         });
-
-
                                     }
 
-                                    if(subActivity_list.get(x).getPayerId().matches(userInfo.getUid())){
 
+                                    if(subActivity_list.get(x).getPayerId().matches(userInfo.getUid())){
                                         db = FirebaseFirestore.getInstance();
                                         DocumentReference documentReference =db.collection("Users").document(subActivity_list.get(x).getOwnerId());
                                         int finalJ1 = j;
@@ -238,6 +242,7 @@ public class HomeFragment  extends Fragment {
                                                 TextView tv_date = new TextView(getActivity());
                                                 tv_date.setId(tv.generateViewId());
                                                 tv_date.setHeight(100);
+
                                                 if(subActivity_list.get(finalX1).getCreatedDate() !=null){
                                                     tv_date.setText(formatter.format(subActivity_list.get(finalX1).getCreatedDate()));
                                                 }
@@ -259,10 +264,8 @@ public class HomeFragment  extends Fragment {
 
                     });   //End get all sub activity
                 }
-                
             }
-
-        });  //End get user overall amount
+        });//End get user overall amount
 
 
 
@@ -280,34 +283,6 @@ public class HomeFragment  extends Fragment {
         });
 
         return view;
-    }
-
-
-
-    public String PerfectDecimal(String str, int MAX_BEFORE_POINT, int MAX_DECIMAL) {
-        if (str.charAt(0) == '.') str = "0" + str;
-        int max = str.length();
-
-        String rFinal = "";
-        boolean after = false;
-        int i = 0, up = 0, decimal = 0;
-        char t;
-        while (i < max) {
-            t = str.charAt(i);
-            if (t != '.' && after == false) {
-                up++;
-                if (up > MAX_BEFORE_POINT) return rFinal;
-            } else if (t == '.') {
-                after = true;
-            } else {
-                decimal++;
-                if (decimal > MAX_DECIMAL)
-                    return rFinal;
-            }
-            rFinal = rFinal + t;
-            i++;
-        }
-        return rFinal;
     }
 
 
