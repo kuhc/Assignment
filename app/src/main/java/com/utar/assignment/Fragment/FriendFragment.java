@@ -107,6 +107,10 @@ public class FriendFragment extends Fragment {
                     GeneralHelper.showMessage(getContext(), "There is no existing friend!");
                 }
                 else if(userInfo.getFriendList()!= null) {
+                    if(userList== null)
+                    {
+                        userList.add("-1");
+                    }
                     userList.addAll(userInfo.getFriendList());
                     int fNo = userList.size();
                     String fNo1 = Integer.toString(fNo);
