@@ -56,33 +56,9 @@ public class settleBill extends AppCompatActivity {
         else
             amountToPay.setTextColor(Color.GREEN);
 
-        GeneralHelper.showMessage(settleBill.this,"Amount :" + amountST);
-
-        /*fStore.collection("Users").document(getIntent().getStringExtra("userID")).get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        User user1 = task.getResult().toObject(User.class);
-                        String um = user1.getUsername();
-
-                        username.setText(um);
-                    }
-                });*/
         FirebaseUser user;
         user = Auth.getInstance().getCurrentUser();
         String uid = user.getUid();
-
-        /*fStore.collection("Users").document(uid).get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        User user1 = task.getResult().toObject(User.class);
-                        Amount amount = user1.getAmountList().get(0);
-
-                        String amountStr = amount.toString();
-
-                    }
-                });*/
 
         int position = getIntent().getIntExtra("position",-1);
         //GeneralHelper.showMessage(settleBill.this,"Position : " + position);

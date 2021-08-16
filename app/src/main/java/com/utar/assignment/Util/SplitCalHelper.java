@@ -196,13 +196,11 @@ public class SplitCalHelper {
                         if( exitingAmount< 0)
                         {
                             double newAmount = exitingAmount+amount;
-                            //amountList.get(i).setAmount(newAmount);
                             user.getAmountList().get(i).setAmount(newAmount);
                         }
                         else if (exitingAmount >0)
                         {
                             double newAmount = exitingAmount - amount;
-                            //amountList.get(i).setAmount(newAmount);
                             user.getAmountList().get(i).setAmount(newAmount);
                         }
                     }
@@ -235,7 +233,6 @@ public class SplitCalHelper {
                         {
                             double newAmount = exitingAmount+amount;
                             String newAmountString = String.valueOf(newAmount);
-                            //amountList.get(i).setAmount(newAmount);
                             user.getAmountList().get(i).setAmount(newAmount);
                             amounttopay.setText(newAmountString);
                         }
@@ -243,7 +240,6 @@ public class SplitCalHelper {
                         {
                             double newAmount = exitingAmount - amount;
                             String newAmountString = String.valueOf(newAmount);
-                            //amountList.get(i).setAmount(newAmount);
                             user.getAmountList().get(i).setAmount(newAmount);
                             amounttopay.setText(newAmountString);
                         }
