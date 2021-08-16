@@ -93,15 +93,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    //refresh when return back this activity
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        finish();
-        overridePendingTransition(0, 0);
-        startActivity(getIntent());
-        overridePendingTransition(0, 0);
-    }
+
 
     private void HmsPushKit() {
         FirestoreHelper.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new FirebaseCallback() {

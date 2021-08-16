@@ -44,8 +44,8 @@ public class friend_adapter extends RecyclerView.Adapter<friend_adapter.ViewHold
         this.listOwnerUsername = listOwnerUsername;
         this.context=context;
     }
-    @NonNull
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull  ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.friend_list, parent, false);
