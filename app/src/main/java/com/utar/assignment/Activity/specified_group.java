@@ -2,10 +2,13 @@ package com.utar.assignment.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -15,7 +18,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
+import com.utar.assignment.Model.Group;
+import com.utar.assignment.Model.MainActivity;
 import com.utar.assignment.R;
+import com.utar.assignment.Util.group_adapter;
+import com.utar.assignment.Util.main_act_adapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,11 +30,11 @@ import java.util.List;
 import java.util.Map;
 
 public class specified_group extends AppCompatActivity {
-
+    RecyclerView recycle_main_activity1;
     Button leavebut1;
 FirebaseFirestore db;
 FirebaseAuth fAuth;
-
+TextView group_name;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +42,14 @@ FirebaseAuth fAuth;
         fAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         leavebut1=findViewById(R.id.leave_but);
+        group_name=findViewById(R.id.specified_group_name);
+        recycle_main_activity1=findViewById(R.id.recycle_main_activity);
+
+
+
+group_name.setText(getIntent().getStringExtra("name"));
+
+
         leavebut1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,5 +94,26 @@ db.collection("Users").document(fAuth.getUid()).update(updates)
                 });
             }
         });
+
+
+db.collection("Group_1").document(getIntent().getStringExtra("g_id")).get()
+        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull  Task<DocumentSnapshot> task) {
+                Group group = task.getResult().toObject(Group.class);
+                List<MainActivity> mainact = group.getMainActivityList();
+
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(specified_group.this);
+                recycle_main_activity1.setLayoutManager(linearLayoutManager);
+                main_act_adapter adapter= new main_act_adapter( specified_group.this,mainact,getIntent().getStringExtra("g_id"));
+                recycle_main_activity1.setAdapter(adapter);
+
+
+            }
+        });
+
+
+
+
     }
 }

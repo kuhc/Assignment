@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.utar.assignment">
 
@@ -8,13 +9,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Assignment">
-        <activity android:name=".Activity.splitActivity"></activity>
+        <activity android:name=".Activity.sub_activity"></activity>
+        <activity android:name=".Activity.splitActivity" />
         <activity android:name=".Activity.GroupMember" />
         <activity android:name=".Activity.AddExpenses" />
         <activity android:name=".Activity.new_member_group" />
         <activity android:name=".Activity.AddFriend" />
         <activity android:name=".Activity.specified_group" />
-        <activity android:name=".Activity.settleBill"/>
+        <activity android:name=".Activity.settleBill" />
         <activity android:name=".Activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
