@@ -8,12 +8,13 @@
     tools:context=".Activity.specified_group">
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/specified_group_name"
         android:layout_width="match_parent"
         android:layout_height="62dp"
         android:text="TextView" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycle_main_activity"
         android:layout_width="match_parent"
         android:layout_height="278dp" />
 
