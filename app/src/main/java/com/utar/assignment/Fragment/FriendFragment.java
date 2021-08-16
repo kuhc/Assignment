@@ -109,8 +109,6 @@ public class FriendFragment extends Fragment {
                     String fNo1 = Integer.toString(fNo);
                     friendNo.setText(fNo1);
 
-
-
                     db.collection("Users").whereIn("email",userList).get()
                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                 @Override
