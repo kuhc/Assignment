@@ -39,6 +39,7 @@ import com.utar.assignment.Util.GeneralHelper;
 import com.utar.assignment.Util.friend_adapter;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -49,6 +50,7 @@ public class FriendFragment extends Fragment {
     FirebaseFirestore db;
     List<String> amountListOwner = new ArrayList<>();
     List<String> listOwnerUsername = new ArrayList<>();
+    List<Amount> amountList = new ArrayList<>();
 
     private User userInfo;
     TextView username;
@@ -57,6 +59,7 @@ public class FriendFragment extends Fragment {
     List<String> friendID = new ArrayList<>();
     View view;
     ListView listView;
+    Iterator<Amount> ownerIterator;
 
 
     @Override
@@ -109,44 +112,40 @@ public class FriendFragment extends Fragment {
                     String fNo1 = Integer.toString(fNo);
                     friendNo.setText(fNo1);
 
-                    db.collection("Users").whereIn("email",userList).get()
-                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    List<User> userList2 = new ArrayList<>();
-                                    userList2=task.getResult().toObjects(User.class);
+                    /*if (userInfo.getAmountList() == null) {
+                        userInfo.setAmountList(new ArrayList<Amount>());
+                    }*/
+                    amountList = userInfo.getAmountList();
+                    ownerIterator = amountList.iterator();
+                    //GeneralHelper.showMessage(getContext(), "this is owner :" + amountListOwner);
 
-                                    if(userInfo.getAmountList()==null){
-                                        userInfo.setAmountList(new ArrayList<Amount>());
-                                    }
-                                    List<Amount> amountList = userInfo.getAmountList();
-                                    for(int i=0; i<amountList.size(); i++) {
-                                        amountListOwner.add(amountList.get(i).getOwnerId());
-                                        //GeneralHelper.showMessage(getContext(), "this is owner :" + amountListOwner);
 
-                                        List<User> finalUserList = userList2;
-                                        int finalI = i;
-                                        db.collection("Users").document(amountListOwner.get(i)).get()
-                                                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                        User user2 = task.getResult().toObject(User.class);
-                                                        listOwnerUsername.add(user2.getUsername());
+                    getOwnerName(ownerIterator.next());
 
-                                                        if (finalI == amountList.size()-1) {
-                                                            initializeRecycleView(finalUserList, amountList, userList, uid, amountListOwner, listOwnerUsername, getActivity());
-                                                        }
-                                                    }
-                                                });
-                                    }
-                                }
-                            });
-                    }
                 }
+                    }
 
         });
 
         return view;
+    }
+
+    private void getOwnerName(Amount amt) {
+        FirestoreHelper.getUser(amt.getOwnerId(), new FirebaseCallback() {
+            @Override
+            public void onResponse(Object object) {
+                User user2 = (User)object;
+                listOwnerUsername.add(user2.getUsername());
+
+                if (!ownerIterator.hasNext()) {
+                    initializeRecycleView(null, amountList, userList, null, amountListOwner, listOwnerUsername, getActivity());
+                    //GeneralHelper.showMessage(getContext(),listOwnerUsername.get(finalI));
+                } else {
+                    getOwnerName(ownerIterator.next());
+                }
+
+            }
+        });
     }
 
     public void initializeRecycleView (List<User> user, List<Amount> amount, List<String> userFriendList, String uid,List<String> amountListOwner, List<String> listOwnerUsername, Context context)
