@@ -21,6 +21,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.utar.assignment.Fragment.GroupFragment;
+import com.utar.assignment.Fragment.HomeFragment;
 import com.utar.assignment.Model.Group;
 import com.utar.assignment.Model.User;
 import com.utar.assignment.R;
@@ -120,9 +122,24 @@ cbs= new ArrayList<CheckBox>();
                                 });
                     }
                 }
+                Intent intent = new Intent(GroupMember.this, specified_group.class);
+                //intent.putExtra("check", "group");
+                intent.putExtra("g_id",  newgroup.getGroupId());
+                intent.putExtra("name",  getIntent().getStringExtra("g_name"));
+                startActivity(intent);
+
+
+
+
+              //  getIntent().getStringExtra("g_name");
+               // newgroup.getGroupId();
+
+
+
 
 
             }
+
         });
 
         myOwnLayout.addView(button_addFriend);

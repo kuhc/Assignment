@@ -44,7 +44,18 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNav = findViewById(R.id.bottom_nav);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+
+//        if(getIntent().getStringExtra("check")!=null && getIntent().getStringExtra("check").equals("group"))
+//        {
+//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GroupFragment()).commit();
+//
+//        }
+//        else
+//        {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+        //}
+
+
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -52,22 +63,29 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             Fragment selectedFragment = null;
 
-            switch (item.getItemId())
-            {
-                case R.id.nav_home:
-                    selectedFragment = new HomeFragment();
-                    break;
-                case R.id.nav_group:
-                    selectedFragment = new GroupFragment();
-                    break;
-                case R.id.nav_friend:
-                    selectedFragment = new FriendFragment();
-                    break;
-                 case R.id.nav_profile:
-                    selectedFragment = new ProfileFragment();
-                    break;
 
-            }
+
+                selectedFragment = new GroupFragment();
+
+
+                switch (item.getItemId())
+                {
+                    case R.id.nav_home:
+                        selectedFragment = new HomeFragment();
+                        break;
+                    case R.id.nav_group:
+                        selectedFragment = new GroupFragment();
+                        break;
+                    case R.id.nav_friend:
+                        selectedFragment = new FriendFragment();
+                        break;
+                    case R.id.nav_profile:
+                        selectedFragment = new ProfileFragment();
+                        break;
+
+                }
+
+
 
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
 
@@ -98,4 +116,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }
