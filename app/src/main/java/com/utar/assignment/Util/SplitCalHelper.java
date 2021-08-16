@@ -14,7 +14,10 @@ import com.utar.assignment.Model.MainActivity;
 import com.utar.assignment.Model.SubActivity;
 import com.utar.assignment.Model.User;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,7 +32,7 @@ public class SplitCalHelper {
 
     public void create_main_activity(Context ctx, ArrayList<String> user_id_list,
                                         ArrayList<Double> split_amount_list, String exp_name, String group_id, double amount) {
-
+        Date date = new Date();
         update_amount_list(user_id_list,split_amount_list,ctx);
 
 
@@ -42,11 +45,13 @@ public class SplitCalHelper {
             subactivity.setPayerId(user_id_list.get(0));
             subactivity.setOwnerId(user_id_list.get(i));
             subactivity.setAmount(split_amount_list.get(i));
+            subactivity.setCreatedDate(date);
             subactivity_List.add(subactivity);
         }
         mainactivity.setSubActivityList(subactivity_List);
         mainactivity.setName(exp_name);
         mainactivity.setId(UUID.randomUUID().toString());
+        mainactivity.setCreatedDate(date);
 
         mainactivity.setBillAmount(amount);
         FirestoreHelper.getGroup(group_id, new FirebaseCallback() {
