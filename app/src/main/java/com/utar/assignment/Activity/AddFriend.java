@@ -10,11 +10,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.SignInMethodQueryResult;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.utar.assignment.Model.Amount;
 import com.utar.assignment.Model.User;
 import com.utar.assignment.R;
 import com.utar.assignment.Util.FirebaseCallback;
@@ -28,6 +33,7 @@ public class AddFriend extends AppCompatActivity {
 
     private static FirebaseFirestore fStore = FirebaseFirestore.getInstance();
     private FirebaseAuth fAuth = FirebaseAuth.getInstance();
+    FirebaseFirestore db;
 
 
     @Override
@@ -88,11 +94,33 @@ public class AddFriend extends AppCompatActivity {
                                         @Override
                                         public void onResponse() {
                                             GeneralHelper.showMessage(AddFriend.this, "Successfully registered!");
-
                                             Intent intent = new Intent(AddFriend.this,MainActivity.class);
                                             startActivity(intent);
                                         }
                                     });
+                               fStore.collection("Users").whereEqualTo("email", email)
+                                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                   @Override
+                                   public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                       User user2 = task.getResult().toObjects(User.class).get(0);
+                                       List<String> emailList2 = new ArrayList<>();
+                                       List<String> existingFriend = user2.getFriendList();
+                                       if(existingFriend != null) {
+                                           emailList2.addAll(existingFriend);
+                                           emailList2.add(user.getEmail());
+                                       }
+
+                                       FirestoreHelper.addFriend(user2.getUid(), emailList2, new FirebaseCallback() {
+                                           @Override
+                                           public void onResponse() {
+                                               GeneralHelper.showMessage(AddFriend.this, "THis is emailList: "+ emailList2);
+                                               Intent intent = new Intent(AddFriend.this,MainActivity.class);
+                                               startActivity(intent);
+                                           }
+                                       });
+                                   }
+                               });
+
                                     userEmail.getText().clear();
                                 }
                             }
