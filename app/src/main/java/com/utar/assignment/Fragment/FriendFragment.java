@@ -47,6 +47,8 @@ public class FriendFragment extends Fragment {
     private static FirebaseFirestore fStore = FirebaseFirestore.getInstance();
     private FirebaseAuth Auth;
     FirebaseFirestore db;
+    List<String> amountListOwner = new ArrayList<>();
+    List<String> listOwnerUsername = new ArrayList<>();
 
     private User userInfo;
     TextView username;
@@ -107,6 +109,8 @@ public class FriendFragment extends Fragment {
                     String fNo1 = Integer.toString(fNo);
                     friendNo.setText(fNo1);
 
+
+
                     db.collection("Users").whereIn("email",userList).get()
                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                 @Override
@@ -114,35 +118,49 @@ public class FriendFragment extends Fragment {
                                     List<User> userList2 = new ArrayList<>();
                                     userList2=task.getResult().toObjects(User.class);
 
-                                    List<String> amounts = new ArrayList<>();
-                                    amounts.add("100");
-                                    amounts.add("200");
-                                    amounts.add("300");
                                     List<Amount> amountList = userInfo.getAmountList();
+                                    for(int i=0; i<amountList.size(); i++) {
+                                        amountListOwner.add(amountList.get(i).getOwnerId());
+                                        //GeneralHelper.showMessage(getContext(), "this is owner :" + amountListOwner);
 
+                                        List<User> finalUserList = userList2;
+                                        int finalI = i;
+                                        db.collection("Users").document(amountListOwner.get(i)).get()
+                                                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                        User user2 = task.getResult().toObject(User.class);
+                                                        listOwnerUsername.add(user2.getUsername());
 
-                                    initializeRecycleView(userList2, amounts,userList,uid, getActivity());
+                                                        if (finalI == amountList.size()-1) {
+                                                            initializeRecycleView(finalUserList, amountList, userList, uid, amountListOwner, listOwnerUsername, getActivity());
+                                                        }
+
+                                                    }
+                                                });
+                                    }
+
                                 }
-
                             });
+                    }
                 }
 
-            }
         });
+
         return view;
     }
 
-    public void initializeRecycleView (List<User> user, List<String> amount, List<String> userFriendList, String uid, Context context)
+    public void initializeRecycleView (List<User> user, List<Amount> amount, List<String> userFriendList, String uid,List<String> amountListOwner, List<String> listOwnerUsername, Context context)
     {
         RecyclerView recyclerView;
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setReverseLayout(true);
-        layoutManager.setStackFromEnd(true);
+        //layoutManager.setReverseLayout(true);
+        //layoutManager.setStackFromEnd(true);
         recyclerView = view.findViewById(R.id.friendList);
         recyclerView.setLayoutManager(layoutManager);
 
         friend_adapter adapter;
-        adapter= new friend_adapter(user,amount,userFriendList,uid,getActivity());
+        adapter= new friend_adapter(user,amount,userFriendList,uid,amountListOwner,listOwnerUsername,context);
         recyclerView.setAdapter(adapter);
     }
 

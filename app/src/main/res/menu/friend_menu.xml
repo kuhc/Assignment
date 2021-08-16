@@ -4,7 +4,4 @@
     <item
         android:id="@+id/settle_bill"
         android:title="Settle Bill" />
-    <item
-        android:id="@+id/delete_friend"
-        android:title="Delete Friend" />
 </menu>
