@@ -7,10 +7,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -57,6 +59,7 @@ public class HomeFragment  extends Fragment {
     private TextView overall,owe;
     private User userInfo;
     double amount;
+    private ProgressBar pb;
     String temp_username;
 
 
@@ -77,7 +80,12 @@ public class HomeFragment  extends Fragment {
         view = inflater.inflate(R.layout.fragment_home, container, false);
         overall = view.findViewById(R.id.home_overall_amount);
         owe = view.findViewById(R.id.home_owe);
+        pb = view.findViewById(R.id.progressBar2);
 
+
+        //done implement progress bar
+        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        pb.setVisibility(View.VISIBLE);
 
         FirebaseUser user;
         user = Auth.getInstance().getCurrentUser();
@@ -212,6 +220,11 @@ public class HomeFragment  extends Fragment {
                                         documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                             @Override
                                             public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                                                //done remove progress bar
+                                                pb.setVisibility(View.INVISIBLE);
+                                                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
                                                 User user = documentSnapshot.toObject(User.class);
                                                 temp_username = user.getUsername();
 
