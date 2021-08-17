@@ -108,7 +108,8 @@ public class AddFriend extends AppCompatActivity {
                                        if(existingFriend != null) {
                                            emailList2.addAll(existingFriend);
                                        }
-                                       emailList2.add(email);
+                                       emailList2.add(userInfo.getEmail());
+
                                        FirestoreHelper.addFriend(user2.getUid(), emailList2, new FirebaseCallback() {
                                            @Override
                                            public void onResponse() {
