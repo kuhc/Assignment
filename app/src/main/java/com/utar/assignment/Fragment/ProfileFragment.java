@@ -85,11 +85,11 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
                 //finish
-                //getActivity().finishAffinity();
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                getActivity().finishAffinity();
+                //Intent intent = new Intent(getActivity(), LoginActivity.class);
+                //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 //intent.putExtra("EXIT", true);
-                getActivity().startActivity(intent);
+                //getActivity().startActivity(intent);
             }
         });
     }
@@ -143,7 +143,7 @@ public class ProfileFragment extends Fragment {
     private void uploadImageToFirebase(Uri imageUri, byte[] photoData) {
 
         // Upload Image to Firebase Storage
-        pd = new ProgressDialog(getActivity());
+        pd = new ProgressDialog(getContext());
         pd.setMessage("Uploading Profile Picture...");
         pd.show();
 
