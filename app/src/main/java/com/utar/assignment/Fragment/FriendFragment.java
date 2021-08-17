@@ -76,6 +76,7 @@ public class FriendFragment extends Fragment {
         user = Auth.getInstance().getCurrentUser();
         uid = user.getUid();
 
+        //Get the username from firestore
         fStore.collection("Users").document(uid).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -98,7 +99,8 @@ public class FriendFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
 
-        DocumentReference documentReference =db.collection("Users").document(uid);
+        //get friend list from firestore
+        DocumentReference documentReference = db.collection("Users").document(uid);
         documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -106,10 +108,8 @@ public class FriendFragment extends Fragment {
 
                 if (userInfo.getFriendList() == null) {
                     GeneralHelper.showMessage(getContext(), "There is no existing friend!");
-                }
-                else if(userInfo.getFriendList()!= null) {
-                    if(userList== null)
-                    {
+                } else if (userInfo.getFriendList() != null) {
+                    if (userList == null) {
                         userList.add("-1");
                     }
                     userList.addAll(userInfo.getFriendList());
@@ -117,18 +117,13 @@ public class FriendFragment extends Fragment {
                     String fNo1 = Integer.toString(fNo);
                     friendNo.setText(fNo1);
 
-                    /*if (userInfo.getAmountList() == null) {
-                        userInfo.setAmountList(new ArrayList<Amount>());
-                    }*/
                     amountList = userInfo.getAmountList();
                     ownerIterator = amountList.iterator();
-                    //GeneralHelper.showMessage(getContext(), "this is owner :" + amountListOwner);
 
-
+                    //interate to get the friends' username
                     getOwnerName(ownerIterator.next());
-
                 }
-                    }
+            }
 
         });
 
@@ -139,7 +134,7 @@ public class FriendFragment extends Fragment {
         FirestoreHelper.getUser(amt.getOwnerId(), new FirebaseCallback() {
             @Override
             public void onResponse(Object object) {
-                User user2 = (User)object;
+                User user2 = (User) object;
                 listOwnerUsername.add(user2.getUsername());
 
                 if (!ownerIterator.hasNext()) {
@@ -153,15 +148,14 @@ public class FriendFragment extends Fragment {
         });
     }
 
-    public void initializeRecycleView (List<User> user, List<Amount> amount, List<String> userFriendList, String uid,List<String> amountListOwner, List<String> listOwnerUsername, Context context)
-    {
+    public void initializeRecycleView(List<User> user, List<Amount> amount, List<String> userFriendList, String uid, List<String> amountListOwner, List<String> listOwnerUsername, Context context) {
         RecyclerView recyclerView;
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView = view.findViewById(R.id.friendList);
         recyclerView.setLayoutManager(layoutManager);
 
         friend_adapter adapter;
-        adapter= new friend_adapter(user,amount,userFriendList,uid,amountListOwner,listOwnerUsername,context);
+        adapter = new friend_adapter(user, amount, userFriendList, uid, amountListOwner, listOwnerUsername, context);
         recyclerView.setAdapter(adapter);
     }
 }

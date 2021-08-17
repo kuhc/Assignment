@@ -82,6 +82,7 @@ public class settleBill extends AppCompatActivity {
 
 
 
+                        //AlertDialog for user to type in the amount they wish to settle
                         AlertDialog.Builder builder = new AlertDialog.Builder(settleBill.this);
                         View v = LayoutInflater.from(settleBill.this).inflate(R.layout.settle_bill_amount, null, false);
                         builder.setTitle("Enter the amount");
