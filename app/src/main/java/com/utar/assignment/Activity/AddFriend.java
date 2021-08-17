@@ -34,7 +34,7 @@ public class AddFriend extends AppCompatActivity {
     private static FirebaseFirestore fStore = FirebaseFirestore.getInstance();
     private FirebaseAuth fAuth = FirebaseAuth.getInstance();
     FirebaseFirestore db;
-
+    User userInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +53,7 @@ public class AddFriend extends AppCompatActivity {
         FirestoreHelper.getUser(uid, new FirebaseCallback() {
             @Override
             public void onResponse(Object object) {
-                User userInfo;
+
                 userInfo = (User)object;
                 List<String> existingFriend = userInfo.getFriendList();
                 if(existingFriend != null) {
@@ -94,10 +94,10 @@ public class AddFriend extends AppCompatActivity {
                                         @Override
                                         public void onResponse() {
                                             GeneralHelper.showMessage(AddFriend.this, "Successfully registered!");
-                                            Intent intent = new Intent(AddFriend.this,MainActivity.class);
-                                            startActivity(intent);
                                         }
                                     });
+
+
                                fStore.collection("Users").whereEqualTo("email", email)
                                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                    @Override
@@ -108,18 +108,22 @@ public class AddFriend extends AppCompatActivity {
                                        if(existingFriend != null) {
                                            emailList2.addAll(existingFriend);
                                        }
-                                       emailList2.add(user.getEmail());
+                                       emailList2.add(email);
                                        FirestoreHelper.addFriend(user2.getUid(), emailList2, new FirebaseCallback() {
                                            @Override
                                            public void onResponse() {
                                                GeneralHelper.showMessage(AddFriend.this, "THis is emailList: "+ emailList2);
-                                               Intent intent = new Intent(AddFriend.this,MainActivity.class);
-                                               startActivity(intent);
                                            }
                                        });
+
+                                       createAmountList(userInfo,user2.getUid(), user2);
+
+                                       createAmountList(user2, uid, userInfo);
+
+                                       Intent intent = new Intent(AddFriend.this,MainActivity.class);
+                                       startActivity(intent);
                                    }
                                });
-
                                     userEmail.getText().clear();
                                 }
                             }
@@ -130,5 +134,25 @@ public class AddFriend extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void createAmountList(User user, String uid, User user2) {
+
+        if(user2.getAmountList() == null)
+        {
+            user2.setAmountList(new ArrayList<Amount>());
+        }
+        Amount temp_amoount2 = new Amount();
+        temp_amoount2.setOwnerId(user.getUid());
+        temp_amoount2.setAmount(0.0);
+        user2.getAmountList().add(temp_amoount2);
+
+        fStore.collection("Users").document(uid).update("amountList",user2.getAmountList())
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        //callback.onResponse();
+                    }
+                });
     }
 }

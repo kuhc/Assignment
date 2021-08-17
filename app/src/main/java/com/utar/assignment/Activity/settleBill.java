@@ -27,6 +27,8 @@ import com.utar.assignment.R;
 import com.utar.assignment.Util.GeneralHelper;
 import com.utar.assignment.Util.SplitCalHelper;
 
+import java.text.DecimalFormat;
+
 public class settleBill extends AppCompatActivity {
 
     private static FirebaseFirestore fStore = FirebaseFirestore.getInstance();
@@ -46,6 +48,8 @@ public class settleBill extends AppCompatActivity {
 
         username.setText(getIntent().getStringExtra("userName"));
         double amounttoPay = getIntent().getDoubleExtra("amounttoPay",-1);
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        amounttoPay = Double.valueOf(decimalFormat.format(amounttoPay));
         String amountST = Double.toString(amounttoPay);
         amountToPay.setText(amountST);
 
@@ -63,6 +67,7 @@ public class settleBill extends AppCompatActivity {
         int position = getIntent().getIntExtra("position",-1);
         //GeneralHelper.showMessage(settleBill.this,"Position : " + position);
 
+        double finalAmounttoPay = amounttoPay;
         settleBillBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,10 +95,10 @@ public class settleBill extends AppCompatActivity {
 
                                     String enteredAmount = editText.getText().toString().trim();
                                     Double enteredAmountDouble = Double.parseDouble(enteredAmount);
-                                    if(amounttoPay < 0) {
-                                        double amounttoPayPositive = Math.abs(amounttoPay);
+                                    if(finalAmounttoPay < 0) {
+                                        double amounttoPayPositive = Math.abs(finalAmounttoPay);
 
-                                        if (enteredAmountDouble > amounttoPayPositive || enteredAmountDouble < amounttoPay) {
+                                        if (enteredAmountDouble > amounttoPayPositive || enteredAmountDouble < finalAmounttoPay) {
                                             GeneralHelper.showMessage(settleBill.this, "The amount is out of range!!!");
                                         } else {
                                             SplitCalHelper splitCalHelper = new SplitCalHelper();
@@ -102,9 +107,9 @@ public class settleBill extends AppCompatActivity {
                                         }
                                     }
 
-                                    else if(amounttoPay >0)
+                                    else if(finalAmounttoPay >0)
                                     {
-                                        if (enteredAmountDouble > amounttoPay || enteredAmountDouble <= 0) {
+                                        if (enteredAmountDouble > finalAmounttoPay || enteredAmountDouble <= 0) {
                                             GeneralHelper.showMessage(settleBill.this, "The amount is out of range!!!");
                                         } else {
                                             SplitCalHelper splitCalHelper = new SplitCalHelper();

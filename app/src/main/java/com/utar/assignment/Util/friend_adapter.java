@@ -22,6 +22,7 @@ import com.utar.assignment.Model.Amount;
 import com.utar.assignment.Model.User;
 import com.utar.assignment.R;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class friend_adapter extends RecyclerView.Adapter<friend_adapter.ViewHolder>{
@@ -58,6 +59,8 @@ public class friend_adapter extends RecyclerView.Adapter<friend_adapter.ViewHold
         //User user = userList.get(position);
         holder.txtName.setText(listOwnerUsername.get(position));
         double amount = amountList.get(position).getAmount();
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        amount = Double.valueOf(decimalFormat.format(amount));
         String amountST = Double.toString(amount);
         holder.amount.setText(amountST);
         if(amount < 0)
@@ -97,7 +100,7 @@ public class friend_adapter extends RecyclerView.Adapter<friend_adapter.ViewHold
                                     int a = getAdapterPosition();
                                     int b = userFriendList.size()-1;
                                     int c = b-a;
-                                    intent.putExtra("userID", userList.get(a).getUid());
+                                    //intent.putExtra("userID", userList.get(a).getUid());
                                     intent.putExtra("userName", listOwnerUsername.get(a));
                                     intent.putExtra("amounttoPay", amountList.get(a).getAmount());
                                     intent.putExtra("position", a);
