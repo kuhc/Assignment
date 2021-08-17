@@ -51,6 +51,7 @@ public class FriendFragment extends Fragment {
     List<String> amountListOwner = new ArrayList<>();
     List<String> listOwnerUsername = new ArrayList<>();
     List<Amount> amountList = new ArrayList<>();
+    String uid;
 
     private User userInfo;
     TextView username;
@@ -73,7 +74,7 @@ public class FriendFragment extends Fragment {
 
         FirebaseUser user;
         user = Auth.getInstance().getCurrentUser();
-        String uid = user.getUid();
+        uid = user.getUid();
 
         fStore.collection("Users").document(uid).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -142,7 +143,7 @@ public class FriendFragment extends Fragment {
                 listOwnerUsername.add(user2.getUsername());
 
                 if (!ownerIterator.hasNext()) {
-                    initializeRecycleView(null, amountList, userList, null, amountListOwner, listOwnerUsername, getActivity());
+                    initializeRecycleView(null, amountList, userList, uid, amountListOwner, listOwnerUsername, getActivity());
                     //GeneralHelper.showMessage(getContext(),listOwnerUsername.get(finalI));
                 } else {
                     getOwnerName(ownerIterator.next());
@@ -156,8 +157,6 @@ public class FriendFragment extends Fragment {
     {
         RecyclerView recyclerView;
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        //layoutManager.setReverseLayout(true);
-        //layoutManager.setStackFromEnd(true);
         recyclerView = view.findViewById(R.id.friendList);
         recyclerView.setLayoutManager(layoutManager);
 
