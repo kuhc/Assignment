@@ -14,6 +14,7 @@ import com.utar.assignment.Model.MainActivity;
 import com.utar.assignment.Model.SubActivity;
 import com.utar.assignment.Model.User;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -234,11 +235,13 @@ public class SplitCalHelper {
                     String getPayerid=  amountList.get(i).getOwnerId();
                     if(getPayerid.equals(owner_id))
                     {
-                        //GeneralHelper.showMessage(context,"This is the number2  " + i + " " + amountList.get(i).getAmount());
+                        //update the amount to pay on the settle bill class
                         double exitingAmount = amountList.get(i).getAmount();
                         if( exitingAmount< 0)
                         {
                             double newAmount = exitingAmount+amount;
+                            DecimalFormat decimalFormat = new DecimalFormat("#.##");
+                            newAmount = Double.valueOf(decimalFormat.format(newAmount));
                             String newAmountString = String.valueOf(newAmount);
                             user.getAmountList().get(i).setAmount(newAmount);
                             amounttopay.setText(newAmountString);
@@ -246,6 +249,8 @@ public class SplitCalHelper {
                         else if (exitingAmount >0)
                         {
                             double newAmount = exitingAmount - amount;
+                            DecimalFormat decimalFormat = new DecimalFormat("#.##");
+                            newAmount = Double.valueOf(decimalFormat.format(newAmount));
                             String newAmountString = String.valueOf(newAmount);
                             user.getAmountList().get(i).setAmount(newAmount);
                             amounttopay.setText(newAmountString);

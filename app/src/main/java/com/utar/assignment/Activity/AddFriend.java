@@ -2,6 +2,7 @@ package com.utar.assignment.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -54,9 +55,9 @@ public class AddFriend extends AppCompatActivity {
             @Override
             public void onResponse(Object object) {
 
-                userInfo = (User)object;
+                userInfo = (User) object;
                 List<String> existingFriend = userInfo.getFriendList();
-                if(existingFriend != null) {
+                if (existingFriend != null) {
                     emailList.addAll(existingFriend);
                 }
             }
@@ -68,69 +69,68 @@ public class AddFriend extends AppCompatActivity {
                 String email = userEmail.getText().toString();
 
 
-                if (email.length()!=0) {
+                if (email.length() != 0) {
                     fAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
                         @Override
                         public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
-                            if (task.getResult().getSignInMethods().size() == 0) {
+                            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                                GeneralHelper.showMessage(AddFriend.this, "Please type in email format!");
+                                userEmail.getText().clear();
+                            } else if (task.getResult().getSignInMethods().size() == 0) {
                                 GeneralHelper.showMessage(AddFriend.this, "The email does not exist");
                                 userEmail.getText().clear();
-                            }
-                            else if (emailList.contains(email))
-                            {
+                            } else if (emailList.contains(email)) {
                                 GeneralHelper.showMessage(AddFriend.this, "The email is already in the friends list!");
                                 userEmail.getText().clear();
-                            }
+                            } else if (email.equals(oriUserEmail)) {
+                                GeneralHelper.showMessage(AddFriend.this, "You cannot type in your email!");
+                                userEmail.getText().clear();
+                            } else {
+                                emailList.add(email);
 
-                            else if(email.equals(oriUserEmail))
-                                {
-                                    GeneralHelper.showMessage(AddFriend.this, "You cannot type in your email!");
-                                    userEmail.getText().clear();
-                                }
-                                else {
-                                    emailList.add(email);
+                                //update friend list of current user
+                                FirestoreHelper.addFriend(uid, emailList, new FirebaseCallback() {
+                                    @Override
+                                    public void onResponse() {
+                                        GeneralHelper.showMessage(AddFriend.this, "Successfully registered!");
+                                    }
+                                });
 
-                                    FirestoreHelper.addFriend(uid, emailList, new FirebaseCallback() {
-                                        @Override
-                                        public void onResponse() {
-                                            GeneralHelper.showMessage(AddFriend.this, "Successfully registered!");
+                                fStore.collection("Users").whereEqualTo("email", email)
+                                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        User user2 = task.getResult().toObjects(User.class).get(0);
+                                        List<String> emailList2 = new ArrayList<>();
+                                        List<String> existingFriend = user2.getFriendList();
+                                        if (existingFriend != null) {
+                                            emailList2.addAll(existingFriend);
                                         }
-                                    });
+                                        emailList2.add(userInfo.getEmail());
 
+                                        //update friend's friend list
+                                        FirestoreHelper.addFriend(user2.getUid(), emailList2, new FirebaseCallback() {
+                                            @Override
+                                            public void onResponse() {
+                                                //GeneralHelper.showMessage(AddFriend.this, "THis is emailList: " + emailList2);
+                                            }
+                                        });
 
-                               fStore.collection("Users").whereEqualTo("email", email)
-                                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                   @Override
-                                   public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                       User user2 = task.getResult().toObjects(User.class).get(0);
-                                       List<String> emailList2 = new ArrayList<>();
-                                       List<String> existingFriend = user2.getFriendList();
-                                       if(existingFriend != null) {
-                                           emailList2.addAll(existingFriend);
-                                       }
-                                       emailList2.add(userInfo.getEmail());
+                                        //create amount list for current user's amount list
+                                        createAmountList(userInfo, user2.getUid(), user2);
 
-                                       FirestoreHelper.addFriend(user2.getUid(), emailList2, new FirebaseCallback() {
-                                           @Override
-                                           public void onResponse() {
-                                               GeneralHelper.showMessage(AddFriend.this, "THis is emailList: "+ emailList2);
-                                           }
-                                       });
+                                        //create amount list for friend's amount list
+                                        createAmountList(user2, uid, userInfo);
 
-                                       createAmountList(userInfo,user2.getUid(), user2);
-
-                                       createAmountList(user2, uid, userInfo);
-
-                                       Intent intent = new Intent(AddFriend.this,MainActivity.class);
-                                       startActivity(intent);
-                                   }
-                               });
-                                    userEmail.getText().clear();
-                                }
+                                        Intent intent = new Intent(AddFriend.this, MainActivity.class);
+                                        startActivity(intent);
+                                    }
+                                });
+                                userEmail.getText().clear();
                             }
+                        }
                     });
-                }
-                else
+                } else
                     GeneralHelper.showMessage(AddFriend.this, "Please type in the email");
             }
         });
@@ -139,8 +139,7 @@ public class AddFriend extends AppCompatActivity {
 
     private void createAmountList(User user, String uid, User user2) {
 
-        if(user2.getAmountList() == null)
-        {
+        if (user2.getAmountList() == null) {
             user2.setAmountList(new ArrayList<Amount>());
         }
         Amount temp_amoount2 = new Amount();
@@ -148,7 +147,7 @@ public class AddFriend extends AppCompatActivity {
         temp_amoount2.setAmount(0.0);
         user2.getAmountList().add(temp_amoount2);
 
-        fStore.collection("Users").document(uid).update("amountList",user2.getAmountList())
+        fStore.collection("Users").document(uid).update("amountList", user2.getAmountList())
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
