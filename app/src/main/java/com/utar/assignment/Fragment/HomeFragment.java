@@ -88,10 +88,9 @@ public class HomeFragment  extends Fragment {
         //get user overall amount
         db = FirebaseFirestore.getInstance();
         DocumentReference documentReference =db.collection("Users").document(uid);
-
-        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException error) {
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
                 SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM");
 
                 userInfo = documentSnapshot.toObject(User.class);
@@ -266,8 +265,6 @@ public class HomeFragment  extends Fragment {
                 }
             }
         });//End get user overall amount
-
-
 
 
         //add expenses Floating button
