@@ -147,7 +147,6 @@ public class HomeFragment  extends Fragment {
                                     continue;
                                 }else{
                                     for(int j = 0; j<group_list.get(i).getMainActivityList().size();j++){
-
                                         mainActivity_list_all.add(group_list.get(i).getMainActivityList().get(j));
                                     }
                                 }
@@ -155,7 +154,6 @@ public class HomeFragment  extends Fragment {
                             }
 
                             //Collections.sort(mainActivity_list_all);
-
                             Collections.sort(mainActivity_list_all, (o1, o2) -> o2.getCreatedDate().compareTo(o1.getCreatedDate()));
 
                             for (int j = 0; j<mainActivity_list_all.size();j++){
@@ -194,7 +192,7 @@ public class HomeFragment  extends Fragment {
                                                 tv_amount.setId(tv.generateViewId());
                                                 tv_amount.setHeight(100);
                                                 tv_amount.setWidth(250);
-                                                tv_amount.setTextSize(22);
+                                                tv_amount.setTextSize(20);
                                                 tv_amount.setTextColor(Color.RED);
                                                 tv_amount.setText("RM "+subActivity_list.get(finalX).getAmount());
 
