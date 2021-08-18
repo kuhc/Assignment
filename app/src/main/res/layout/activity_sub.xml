@@ -7,6 +7,19 @@
     android:orientation="vertical"
     tools:context=".Activity.sub_activity">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+        <TextView
+            android:id="@+id/Justname1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Transaction History"
+            android:textColor="@color/black"
+            android:textSize="30sp"/>
+    </RelativeLayout>
+
     <ListView
         android:id="@+id/sub_listview"
         android:layout_width="match_parent"
