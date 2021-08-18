@@ -40,6 +40,7 @@
             android:foregroundGravity="center"
             android:gravity="center_horizontal"
             android:textSize="30sp"
+            android:textStyle="bold|italic"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/home_overall"
             app:layout_constraintStart_toStartOf="@+id/home_overall"
