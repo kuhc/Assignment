@@ -150,9 +150,9 @@ public class HomeFragment  extends Fragment {
 
                             }
 
-                            Collections.sort(mainActivity_list_all);
+                            //Collections.sort(mainActivity_list_all);
 
-                            //Collections.sort(mainActivity_list_all, (o1, o2) -> o2.getCreatedDate().compareTo(o1.getCreatedDate()));
+                            Collections.sort(mainActivity_list_all, (o1, o2) -> o2.getCreatedDate().compareTo(o1.getCreatedDate()));
 
                             for (int j = 0; j<mainActivity_list_all.size();j++){
 
