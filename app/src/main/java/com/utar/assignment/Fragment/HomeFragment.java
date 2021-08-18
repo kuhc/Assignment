@@ -135,6 +135,10 @@ public class HomeFragment  extends Fragment {
                     groupRef.whereIn("groupId", userInfo.getGroupList()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            //done remove progress bar
+                            pb.setVisibility(View.INVISIBLE);
+                            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
                             group_list=task.getResult().toObjects(Group.class);
 
                             for(int i = 0; i<group_list.size();i++){
@@ -171,6 +175,8 @@ public class HomeFragment  extends Fragment {
                                         documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                             @Override
                                             public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+
                                                 User user = documentSnapshot.toObject(User.class);
                                                 temp_username = user.getUsername();
 
@@ -225,9 +231,7 @@ public class HomeFragment  extends Fragment {
                                             @Override
                                             public void onSuccess(DocumentSnapshot documentSnapshot) {
 
-                                                //done remove progress bar
-                                                pb.setVisibility(View.INVISIBLE);
-                                                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
 
                                                 User user = documentSnapshot.toObject(User.class);
                                                 temp_username = user.getUsername();
