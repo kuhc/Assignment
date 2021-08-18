@@ -181,12 +181,14 @@ public class HomeFragment  extends Fragment {
                                                 tv.setHeight(200);
                                                 tv.setWidth(300);
                                                 tv.setTextSize(20);
+                                                tv.setTextColor(Color.BLACK);
                                                 tv.setText(mainActivity_list_all.get(finalJ).getName());
 
                                                 TextView tv_amount = new TextView(getActivity());
                                                 tv_amount.setId(tv.generateViewId());
                                                 tv_amount.setHeight(100);
                                                 tv_amount.setWidth(250);
+                                                tv_amount.setTextSize(22);
                                                 tv_amount.setTextColor(Color.RED);
                                                 tv_amount.setText("RM "+subActivity_list.get(finalX).getAmount());
 
@@ -194,11 +196,13 @@ public class HomeFragment  extends Fragment {
                                                 tv_username.setId(tv.generateViewId());
                                                 tv_username.setHeight(100);
                                                 tv_username.setWidth(250);
+                                                tv_username.setTextColor(Color.BLACK);
                                                 tv_username.setText(temp_username);
 
                                                 TextView tv_date = new TextView(getActivity());
                                                 tv_date.setId(tv.generateViewId());
                                                 tv_date.setHeight(100);
+                                                tv_date.setTextColor(Color.BLACK);
                                                 if(subActivity_list.get(finalX).getCreatedDate() !=null){
                                                     tv_date.setText(formatter.format(subActivity_list.get(finalX).getCreatedDate()));
                                                 }
@@ -236,24 +240,28 @@ public class HomeFragment  extends Fragment {
                                                 tv.setHeight(200);
                                                 tv.setWidth(300);
                                                 tv.setTextSize(20);
+                                                tv.setTextColor(Color.BLACK);
                                                 tv.setText(mainActivity_list_all.get(finalJ1).getName());
 
                                                 TextView tv_username = new TextView(getActivity());
                                                 tv_username.setId(tv.generateViewId());
                                                 tv_username.setHeight(100);
                                                 tv_username.setWidth(250);
+                                                tv_username.setTextColor(Color.BLACK);
                                                 tv_username.setText(temp_username);
 
                                                 TextView tv_amount = new TextView(getActivity());
                                                 tv_amount.setId(tv.generateViewId());
                                                 tv_amount.setHeight(100);
                                                 tv_amount.setWidth(250);
+                                                tv_amount.setTextSize(22);
                                                 tv_amount.setTextColor(Color.GREEN);
                                                 tv_amount.setText("RM "+subActivity_list.get(finalX1).getAmount());
 
                                                 TextView tv_date = new TextView(getActivity());
                                                 tv_date.setId(tv.generateViewId());
                                                 tv_date.setHeight(100);
+                                                tv_date.setTextColor(Color.BLACK);
 
                                                 if(subActivity_list.get(finalX1).getCreatedDate() !=null){
                                                     tv_date.setText(formatter.format(subActivity_list.get(finalX1).getCreatedDate()));

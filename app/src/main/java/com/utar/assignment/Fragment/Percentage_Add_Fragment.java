@@ -75,6 +75,11 @@ public class Percentage_Add_Fragment extends Fragment {
         TextView result = new TextView(getActivity());
         btn_split = new Button(getActivity());
         btn_split.setText("Split Percentage");
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.weight = 0f;
+        params.setMargins(50,50,50,50);
+        params.gravity = Gravity.RIGHT;
+        btn_split.setLayoutParams(params);
         btn_split.setEnabled(false);
 
 
@@ -86,6 +91,7 @@ public class Percentage_Add_Fragment extends Fragment {
         result.setTextSize(20);
         result.setGravity(Gravity.CENTER);
         result.setText("Key in and split out 100%");
+        result.setBackgroundColor(Color.LTGRAY);
         ll.addView(result);
 
 
@@ -112,6 +118,7 @@ public class Percentage_Add_Fragment extends Fragment {
             tv_pay.setId(tv.generateViewId());
             tv_pay.setHeight(100);
             tv_pay.setWidth(200);
+            tv_pay.setTextColor(Color.BLACK);
             tv_pay.setText("RM" + split);
             ll_hori.addView(tv_pay);
             tv_pay.setLayoutParams(tvLayoutParams);

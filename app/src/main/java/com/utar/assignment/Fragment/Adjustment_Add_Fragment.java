@@ -70,6 +70,12 @@ public class Adjustment_Add_Fragment extends Fragment {
         TextView result = new TextView(getActivity());
         btn_split = new Button(getActivity());
         btn_split.setText("Split By Adjusted");
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.weight = 0f;
+        params.setMargins(50,50,50,50);
+        params.gravity = Gravity.RIGHT;
+        btn_split.setLayoutParams(params);
+        btn_split.setEnabled(false);
 
 
         result.setId(result.generateViewId());
@@ -78,7 +84,8 @@ public class Adjustment_Add_Fragment extends Fragment {
         result.setTextColor(Color.BLACK);
         result.setTextSize(20);
         result.setGravity(Gravity.CENTER);
-        result.setText("Key in and split out RM"+amount);
+        result.setBackgroundColor(Color.LTGRAY);
+        result.setText("Key in the adjustment in RM"+amount);
         ll.addView(result);
 
 
@@ -104,7 +111,8 @@ public class Adjustment_Add_Fragment extends Fragment {
             tv_pay.setId(tv.generateViewId());
             tv_pay.setHeight(100);
             tv_pay.setWidth(200);
-            tv_pay.setText("RM");
+            tv_pay.setText("RM ");
+            tv_pay.setTextColor(Color.BLACK);
             ll_hori.addView(tv_pay);
             tv_pay.setLayoutParams(tvLayoutParams);
 
@@ -115,7 +123,7 @@ public class Adjustment_Add_Fragment extends Fragment {
             editText.setHeight(100);
             editText.setWidth(200);
             editText.setLayoutParams(tvLayoutParams);
-            editText.setRawInputType(InputType.TYPE_CLASS_NUMBER);
+            editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL); //for decimal numbers
 
             editText.addTextChangedListener(new TextWatcher() {
 
@@ -125,6 +133,7 @@ public class Adjustment_Add_Fragment extends Fragment {
 
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     String str = editText.getText().toString();
+                    double parse_amount;
 
                     //check the decimal point
                     if (!str.isEmpty()){
@@ -133,6 +142,23 @@ public class Adjustment_Add_Fragment extends Fragment {
                             editText.setText(str2);
                             editText.setSelection(str2.length());
                         }
+
+                    }
+
+                    if(str.matches("")
+                            ||str.contains("-")
+                            ||str.contains("\\")
+                            ||str.contains("*")
+                            ||str.contains("+")
+                            ||str.contains("_")
+                    ){
+                        parse_amount = 0;
+                    }else{
+                        parse_amount = Double.parseDouble(str);
+                    }
+
+                    if(parse_amount > amount){
+                        editText.setText(Double.toString(amount));
                     }
 
                     adjustment_split(list ,tv_list,amount);
@@ -188,6 +214,7 @@ public class Adjustment_Add_Fragment extends Fragment {
                     ||et.contains("\\")
                     ||et.contains("*")
                     ||et.contains("+")
+                    ||et.contains("_")
             ){
 
             }else{
@@ -217,8 +244,18 @@ public class Adjustment_Add_Fragment extends Fragment {
         }
 
         for(int i = 0; i <list.size(); i++){
+           if(adjusted_amount[i]<0){
+               btn_split.setEnabled(false);
+               break;
+           }else{
+               btn_split.setEnabled(true);
+           }
+        }
+
+        for(int i = 0; i <list.size(); i++){
             tv_list.get(i).setText("RM"+adjusted_amount[i]);
         }
+
 
     }
 
@@ -271,6 +308,7 @@ public class Adjustment_Add_Fragment extends Fragment {
         for(int i = 0; i <adjust_list.size(); i++){
             result_list.add(adjusted_amount[i]);
         }
+
 
         return result_list;
     }

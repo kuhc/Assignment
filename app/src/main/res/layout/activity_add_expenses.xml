@@ -43,42 +43,35 @@
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/add_chipGroup"
-                android:layout_width="376dp"
+                android:layout_width="wrap_content"
                 android:layout_height="84dp"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="50px"
                 app:singleLine="false">
 
             </com.google.android.material.chip.ChipGroup>
+
+            <TextView
+                android:id="@+id/add_group_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="100px"
+                android:text="Group" />
 
             <Spinner
                 android:id="@+id/add_group"
                 android:layout_width="332dp"
                 android:layout_height="55dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_margin="50px"
+                android:layout_margin="10px"
                 android:dropDownSelector="@android:drawable/dialog_frame"
                 android:scrollbarAlwaysDrawVerticalTrack="false"
                 android:spinnerMode="dropdown"
                 android:splitMotionEvents="false" />
 
             <EditText
-                android:id="@+id/add_amount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:background="@drawable/custom_container"
-                android:ems="10"
-                android:hint="Amount"
-                android:inputType="number|text|numberDecimal|textEmailAddress"
-                android:numeric="integer"
-                android:padding="20dp" />
-
-            <EditText
                 android:id="@+id/add_expensesname"
-                android:layout_width="376dp"
+                android:layout_width="374dp"
                 android:layout_height="65dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="50px"
@@ -87,6 +80,37 @@
                 android:hint="Expenses Name"
                 android:inputType="textEmailAddress"
                 android:padding="20dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="50px"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/add_RM"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:text="RM"
+                    android:textSize="36sp" />
+
+                <EditText
+                    android:id="@+id/add_amount"
+                    android:layout_width="221dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:background="@drawable/custom_container"
+                    android:ems="10"
+                    android:hint="Amount"
+                    android:inputType="number|text|numberDecimal|textEmailAddress"
+                    android:numeric="integer|decimal"
+                    android:padding="20dp" />
+            </LinearLayout>
 
             <Button
                 android:id="@+id/add_split_unequally"

@@ -7,8 +7,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
-        android:layout_width="395dp"
-        android:layout_height="207dp"
+        android:layout_width="0dp"
+        android:layout_height="212dp"
         android:background="@color/purple_200"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -68,13 +68,13 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:clickable="true"
+        android:src="@drawable/ic_add"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:src="@drawable/ic_add"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <ScrollView
         android:id="@+id/scrollView2"
-        android:layout_width="342dp"
+        android:layout_width="wrap_content"
         android:layout_height="276dp"
         android:background="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"

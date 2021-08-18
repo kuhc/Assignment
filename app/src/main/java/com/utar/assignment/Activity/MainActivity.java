@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Run Hms Push Kit
-        HmsPushKit();
+        //HmsPushKit();
 
         bottomNav = findViewById(R.id.bottom_nav);
         bottomNav.setOnNavigationItemSelectedListener(navListener);

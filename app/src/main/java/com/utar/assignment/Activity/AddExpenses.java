@@ -144,7 +144,15 @@ public class AddExpenses extends AppCompatActivity {
             }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                //check the decimal point
+                String str = amount.getText().toString();
+                if (!str.isEmpty()){
+                    String str2 = PerfectDecimal(str, 3, 2);
+                    if (!str2.equals(str)) {
+                        amount.setText(str2);
+                        amount.setSelection(str2.length());
+                    }
+                }
                 cal_temp_result();
             }
         });
@@ -243,7 +251,14 @@ public class AddExpenses extends AppCompatActivity {
 
         double amounts = 0;
         String text =amount.getText().toString();
-        if(text.matches("")){
+
+        if(text.matches("")
+                ||text.contains("-")
+                ||text.contains("\\")
+                ||text.contains("*")
+                ||text.contains("+")
+                ||text.contains("_")
+        ){
             amounts=0;
         }else{
             amounts = Double.parseDouble(text);
@@ -413,6 +428,32 @@ public class AddExpenses extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    public String PerfectDecimal(String str, int MAX_BEFORE_POINT, int MAX_DECIMAL) {
+        if (str.charAt(0) == '.') str = "0" + str;
+        int max = str.length();
+
+        String rFinal = "";
+        boolean after = false;
+        int i = 0, up = 0, decimal = 0;
+        char t;
+        while (i < max) {
+            t = str.charAt(i);
+            if (t != '.' && after == false) {
+                up++;
+                if (up > MAX_BEFORE_POINT) return rFinal;
+            } else if (t == '.') {
+                after = true;
+            } else {
+                decimal++;
+                if (decimal > MAX_DECIMAL)
+                    return rFinal;
+            }
+            rFinal = rFinal + t;
+            i++;
+        }
+        return rFinal;
     }
 
 
