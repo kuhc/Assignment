@@ -75,6 +75,11 @@ public class Unequal_Add_Fragment extends Fragment {
         btn_split = new Button(getActivity());
         btn_split.setText("Split Unequally");
         btn_split.setEnabled(false);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.weight = 0f;
+        params.setMargins(50,50,50,50);
+        params.gravity = Gravity.RIGHT;
+        btn_split.setLayoutParams(params);
 
 
         result.setId(result.generateViewId());
@@ -83,6 +88,7 @@ public class Unequal_Add_Fragment extends Fragment {
         result.setTextColor(Color.BLACK);
         result.setTextSize(20);
         result.setGravity(Gravity.CENTER);
+        result.setBackgroundColor(Color.LTGRAY);
         result.setText("Key in and split out RM"+amount);
         ll.addView(result);
 
@@ -111,7 +117,7 @@ public class Unequal_Add_Fragment extends Fragment {
             editText.setHeight(100);
             editText.setWidth(200);
             editText.setLayoutParams(tvLayoutParams);
-            editText.setRawInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL); //for decimal numbers
 
             editText.addTextChangedListener(new TextWatcher() {
 
@@ -132,7 +138,7 @@ public class Unequal_Add_Fragment extends Fragment {
                     }
 
                     double temp_double = unequally_left(list,amount);
-
+                    temp_double = Math.round(temp_double * 100.0) / 100.0;
                     if(temp_double < 0){
                         temp_double = Math.abs(temp_double);
                         result.setText("The amount is over RM" + temp_double);
