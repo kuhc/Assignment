@@ -287,6 +287,10 @@ public class HomeFragment  extends Fragment {
                         }
 
                     });   //End get all sub activity
+                }else{
+                    pb.setVisibility(View.INVISIBLE);
+                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    GeneralHelper.showMessage(getActivity(),"You have not expenses yet.");
                 }
             }
         });//End get user overall amount
