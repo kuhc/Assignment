@@ -63,7 +63,7 @@ public class Percentage_Add_Fragment extends Fragment {
         int split_user = split_user_list.size();
         double amount = Double.parseDouble(intent.getStringExtra("amount"));;
 
-        double split = amount/split_user;
+        double split = Math.round((amount/split_user) * 100.0) / 100.0;
 
 
         LinearLayout ll = new LinearLayout (getActivity());
