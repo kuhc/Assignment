@@ -1,6 +1,5 @@
 package com.utar.assignment.Model;
 
-import java.util.Date;
 import java.util.List;
 
 public class MainActivity implements Comparable<MainActivity> {

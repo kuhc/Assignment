@@ -16,21 +16,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
-import com.utar.assignment.Activity.LoginActivity;
 import com.utar.assignment.Model.User;
 import com.utar.assignment.R;
 import com.utar.assignment.Util.FirebaseCallback;
@@ -72,7 +65,7 @@ public class ProfileFragment extends Fragment {
 
         // Profile Picture Menu
         createProfilePictureMenu();
-        
+
         // set Logout Listener
         setBtnLogoutListener();
 
@@ -86,10 +79,6 @@ public class ProfileFragment extends Fragment {
                 FirebaseAuth.getInstance().signOut();
                 //finish
                 getActivity().finishAffinity();
-                //Intent intent = new Intent(getActivity(), LoginActivity.class);
-                //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                //intent.putExtra("EXIT", true);
-                //getActivity().startActivity(intent);
             }
         });
     }
@@ -149,7 +138,7 @@ public class ProfileFragment extends Fragment {
 
         String child = "users/" + fUser.getUid() + "/profile_picture.jpg";
 
-        if(photoData == null)
+        if (photoData == null)
             StorageHelper.uploadImage(child, imageUri, new FirebaseCallback() {
                 @Override
                 public void onResponse(Uri uri) {
@@ -171,7 +160,7 @@ public class ProfileFragment extends Fragment {
         FirestoreHelper.getUser(fUser.getUid(), new FirebaseCallback() {
             @Override
             public void onResponse(Object object) {
-                user = (User)object;
+                user = (User) object;
                 txtName.setText(user.getUsername());
                 txtEmail.setText(user.getEmail());
 

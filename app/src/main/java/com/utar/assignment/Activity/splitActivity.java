@@ -1,19 +1,15 @@
 package com.utar.assignment.Activity;
 
+import android.os.Bundle;
+import android.view.MenuItem;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.os.Bundle;
-import android.view.MenuItem;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.utar.assignment.Fragment.Adjustment_Add_Fragment;
-import com.utar.assignment.Fragment.FriendFragment;
-import com.utar.assignment.Fragment.GroupFragment;
-import com.utar.assignment.Fragment.HomeFragment;
 import com.utar.assignment.Fragment.Percentage_Add_Fragment;
-import com.utar.assignment.Fragment.ProfileFragment;
 import com.utar.assignment.Fragment.Unequal_Add_Fragment;
 import com.utar.assignment.R;
 
@@ -36,8 +32,7 @@ public class splitActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             Fragment selectedFragment = null;
 
-            switch (item.getItemId())
-            {
+            switch (item.getItemId()) {
 
                 case R.id.split_unequal:
                     selectedFragment = new Unequal_Add_Fragment();

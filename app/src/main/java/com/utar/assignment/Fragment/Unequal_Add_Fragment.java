@@ -1,11 +1,5 @@
 package com.utar.assignment.Fragment;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -21,19 +15,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.utar.assignment.Activity.AddExpenses;
-import com.utar.assignment.Model.User;
-import com.utar.assignment.R;
-import com.utar.assignment.Util.FirebaseCallback;
-import com.utar.assignment.Util.FirestoreHelper;
-import com.utar.assignment.Util.GeneralHelper;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+
 import com.utar.assignment.Util.SplitCalHelper;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Unequal_Add_Fragment extends Fragment {
 
@@ -49,14 +39,14 @@ public class Unequal_Add_Fragment extends Fragment {
 
         Intent intent = getActivity().getIntent();
         int temp_i = 0;
-        while (intent.hasExtra("users" + temp_i)){
+        while (intent.hasExtra("users" + temp_i)) {
             String temp = intent.getStringExtra("users" + temp_i);
             split_user_list.add(temp);
             temp_i++;
         }
 
-        int temp_j= 0;
-        while (intent.hasExtra("usersid" + temp_j)){
+        int temp_j = 0;
+        while (intent.hasExtra("usersid" + temp_j)) {
             String temp = intent.getStringExtra("usersid" + temp_j);
             split_userid_list.add(temp);
             temp_j++;
@@ -67,7 +57,7 @@ public class Unequal_Add_Fragment extends Fragment {
         double amount = Double.parseDouble(intent.getStringExtra("amount"));
 
 
-        LinearLayout ll = new LinearLayout (getActivity());
+        LinearLayout ll = new LinearLayout(getActivity());
         ll.setOrientation(LinearLayout.VERTICAL);
 
         ArrayList<EditText> list = new ArrayList<>();
@@ -77,10 +67,9 @@ public class Unequal_Add_Fragment extends Fragment {
         btn_split.setEnabled(false);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         params.weight = 0f;
-        params.setMargins(50,50,50,50);
+        params.setMargins(50, 50, 50, 50);
         params.gravity = Gravity.RIGHT;
         btn_split.setLayoutParams(params);
-
 
         result.setId(result.generateViewId());
         result.setHeight(100);
@@ -89,14 +78,14 @@ public class Unequal_Add_Fragment extends Fragment {
         result.setTextSize(20);
         result.setGravity(Gravity.CENTER);
         result.setBackgroundColor(Color.LTGRAY);
-        result.setText("Key in and split out RM"+amount);
+        result.setText("Key in and split out RM" + amount);
         ll.addView(result);
 
 
-        for(int i = 0 ; i<split_user ; i++){
+        for (int i = 0; i < split_user; i++) {
 
-            int id_generate = 100+i;
-            LinearLayout ll_hori = new LinearLayout (getActivity());
+            int id_generate = 100 + i;
+            LinearLayout ll_hori = new LinearLayout(getActivity());
             ll_hori.setOrientation(LinearLayout.HORIZONTAL);
 
             TextView tv = new TextView(getActivity());
@@ -121,15 +110,17 @@ public class Unequal_Add_Fragment extends Fragment {
 
             editText.addTextChangedListener(new TextWatcher() {
 
-                public void afterTextChanged(Editable s) { }
+                public void afterTextChanged(Editable s) {
+                }
 
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
 
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     String str = editText.getText().toString();
 
                     //check the decimal point
-                    if (!str.isEmpty()){
+                    if (!str.isEmpty()) {
                         String str2 = PerfectDecimal(str, 3, 2);
                         if (!str2.equals(str)) {
                             editText.setText(str2);
@@ -137,22 +128,19 @@ public class Unequal_Add_Fragment extends Fragment {
                         }
                     }
 
-                    double temp_double = unequally_left(list,amount);
+                    double temp_double = unequally_left(list, amount);
                     temp_double = Math.round(temp_double * 100.0) / 100.0;
-                    if(temp_double < 0){
+                    if (temp_double < 0) {
                         temp_double = Math.abs(temp_double);
                         result.setText("The amount is over RM" + temp_double);
                         result.setTextColor(Color.RED);
                         btn_split.setEnabled(false);
-                    }else if(temp_double == 0)
-                    {
+                    } else if (temp_double == 0) {
                         result.setText("The amount has been split out");
                         result.setTextColor(Color.GREEN);
                         btn_split.setEnabled(true);
-                    }
-                    else
-                    {
-                        result.setText("The amount left RM"+ temp_double);
+                    } else {
+                        result.setText("The amount left RM" + temp_double);
                         result.setTextColor(Color.BLACK);
                         btn_split.setEnabled(false);
                     }
@@ -165,25 +153,24 @@ public class Unequal_Add_Fragment extends Fragment {
         }
 
 
-
         btn_split.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ArrayList<Double> amount_list = new ArrayList<>();
-                for(int i = 0; i<list.size();i++){
+                for (int i = 0; i < list.size(); i++) {
 
                     double amounts = 0;
-                    String text =list.get(i).getText().toString();
-                    if(text.matches("")){
-                        amounts=0;
-                    }else{
+                    String text = list.get(i).getText().toString();
+                    if (text.matches("")) {
+                        amounts = 0;
+                    } else {
                         amounts = Double.parseDouble(text);
                     }
                     amount_list.add(amounts);
                 }
                 SplitCalHelper sh = new SplitCalHelper();
-                sh.create_main_activity(getActivity(),split_userid_list,amount_list,intent.getStringExtra("name"),
-                        intent.getStringExtra("group"),amount);
+                sh.create_main_activity(getActivity(), split_userid_list, amount_list, intent.getStringExtra("name"),
+                        intent.getStringExtra("group"), amount);
 
                 getActivity().finish();
             }
@@ -221,19 +208,19 @@ public class Unequal_Add_Fragment extends Fragment {
         return rFinal;
     }
 
-    public double unequally_left(ArrayList<EditText> list, double amounts){
+    public double unequally_left(ArrayList<EditText> list, double amounts) {
 
         double temp_amounts;
-        for(int i = 0; i <list.size(); i++){
+        for (int i = 0; i < list.size(); i++) {
 
-            if(list.get(i).getText().toString().matches("")
-                    ||list.get(i).getText().toString().contains("-")
-                    ||list.get(i).getText().toString().contains("\\")
-                    ||list.get(i).getText().toString().contains("*")
-                    ||list.get(i).getText().toString().contains("+")
-            ){
-                temp_amounts=0;
-            }else{
+            if (list.get(i).getText().toString().matches("")
+                    || list.get(i).getText().toString().contains("-")
+                    || list.get(i).getText().toString().contains("\\")
+                    || list.get(i).getText().toString().contains("*")
+                    || list.get(i).getText().toString().contains("+")
+            ) {
+                temp_amounts = 0;
+            } else {
                 temp_amounts = Double.parseDouble(list.get(i).getText().toString());
             }
 

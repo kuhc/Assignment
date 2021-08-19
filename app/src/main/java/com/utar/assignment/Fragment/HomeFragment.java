@@ -1,6 +1,5 @@
 package com.utar.assignment.Fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,18 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -30,9 +24,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.utar.assignment.Activity.AddExpenses;
 import com.utar.assignment.Model.Amount;
@@ -41,27 +33,21 @@ import com.utar.assignment.Model.MainActivity;
 import com.utar.assignment.Model.SubActivity;
 import com.utar.assignment.Model.User;
 import com.utar.assignment.R;
-import com.utar.assignment.Util.FirebaseCallback;
-import com.utar.assignment.Util.FirestoreHelper;
 import com.utar.assignment.Util.GeneralHelper;
-import com.utar.assignment.Util.SplitCalHelper;
-import com.utar.assignment.Util.friend_adapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
-public class HomeFragment  extends Fragment {
+public class HomeFragment extends Fragment {
 
     //variable
-    private TextView overall,owe;
+    private TextView overall, owe;
     private User userInfo;
     double amount;
     private ProgressBar pb;
     String temp_username;
-
 
     //firebase
     FirebaseFirestore db;
@@ -70,68 +56,66 @@ public class HomeFragment  extends Fragment {
     //model
     private List<Group> group_list = new ArrayList<>();
     private List<MainActivity> mainActivity_list_all = new ArrayList<>();
-    private ArrayList<Amount> amount_list =new ArrayList<>();
+    private ArrayList<Amount> amount_list = new ArrayList<>();
     private View view;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        FirebaseUser user;
+        user = Auth.getInstance().getCurrentUser();
+        String uid = user.getUid();
+
         view = inflater.inflate(R.layout.fragment_home, container, false);
         overall = view.findViewById(R.id.home_overall_amount);
         owe = view.findViewById(R.id.home_owe);
         pb = view.findViewById(R.id.progressBar2);
 
-
         //done implement progress bar
         getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         pb.setVisibility(View.VISIBLE);
 
-        FirebaseUser user;
-        user = Auth.getInstance().getCurrentUser();
-        String uid = user.getUid();
-
-
 
         //get user overall amount
         db = FirebaseFirestore.getInstance();
-        DocumentReference documentReference =db.collection("Users").document(uid);
+        DocumentReference documentReference = db.collection("Users").document(uid);
         documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM");
 
                 userInfo = documentSnapshot.toObject(User.class);
-                if (userInfo.getAmountList()==null){
+                if (userInfo.getAmountList() == null) {
                     userInfo.setAmountList(new ArrayList<Amount>());
                 }
 
-                for(int i = 0;i<userInfo.getAmountList().size();i++){
+                for (int i = 0; i < userInfo.getAmountList().size(); i++) {
 
                     amount_list.add(userInfo.getAmountList().get(i));
                 }
 
                 //add total amount
-                for(int i = 0;i<amount_list.size();i++){
+                for (int i = 0; i < amount_list.size(); i++) {
                     amount = amount + amount_list.get(i).getAmount();
                 }
-                if(amount < 0){
+                if (amount < 0) {
                     overall.setTextColor(Color.RED);
                     owe.setText("You Owe");
-                }else{
+                } else {
                     overall.setTextColor(Color.GREEN);
                     owe.setText("Owe you");
                 }
                 amount = Math.round(amount * 100.0) / 100.0;
 
-                overall.setText("RM "+ amount);
+                overall.setText("RM " + amount);
 
                 LinearLayout ll = view.findViewById(R.id.home_expenses_list);
                 ll.removeAllViews();
 
                 //get all sub activity
                 CollectionReference groupRef = db.collection("Group_1");
-                if(userInfo.getGroupList()!=null) {
+                if (userInfo.getGroupList() != null) {
                     groupRef.whereIn("groupId", userInfo.getGroupList()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -139,14 +123,14 @@ public class HomeFragment  extends Fragment {
                             pb.setVisibility(View.INVISIBLE);
                             getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                            group_list=task.getResult().toObjects(Group.class);
+                            group_list = task.getResult().toObjects(Group.class);
 
-                            for(int i = 0; i<group_list.size();i++){
+                            for (int i = 0; i < group_list.size(); i++) {
 
-                                if(group_list.get(i).getMainActivityList() == null){
+                                if (group_list.get(i).getMainActivityList() == null) {
                                     continue;
-                                }else{
-                                    for(int j = 0; j<group_list.get(i).getMainActivityList().size();j++){
+                                } else {
+                                    for (int j = 0; j < group_list.get(i).getMainActivityList().size(); j++) {
                                         mainActivity_list_all.add(group_list.get(i).getMainActivityList().get(j));
                                     }
                                 }
@@ -156,17 +140,17 @@ public class HomeFragment  extends Fragment {
                             //Collections.sort(mainActivity_list_all);
                             Collections.sort(mainActivity_list_all, (o1, o2) -> o2.getCreatedDate().compareTo(o1.getCreatedDate()));
 
-                            for (int j = 0; j<mainActivity_list_all.size();j++){
+                            for (int j = 0; j < mainActivity_list_all.size(); j++) {
 
                                 List<SubActivity> subActivity_list = mainActivity_list_all.get(j).getSubActivityList();
 
-                                for(int x = 0; x<subActivity_list.size();x++){
+                                for (int x = 0; x < subActivity_list.size(); x++) {
 
                                     //if current user involve in this activity.
-                                    if(subActivity_list.get(x).getOwnerId().matches(userInfo.getUid()) ){
+                                    if (subActivity_list.get(x).getOwnerId().matches(userInfo.getUid())) {
 
                                         db = FirebaseFirestore.getInstance();
-                                        DocumentReference documentReference =db.collection("Users").document(subActivity_list.get(x).getPayerId());
+                                        DocumentReference documentReference = db.collection("Users").document(subActivity_list.get(x).getPayerId());
                                         int finalX = x;
                                         int finalJ = j;
 
@@ -194,7 +178,7 @@ public class HomeFragment  extends Fragment {
                                                 tv_amount.setWidth(250);
                                                 tv_amount.setTextSize(20);
                                                 tv_amount.setTextColor(Color.RED);
-                                                tv_amount.setText("RM "+subActivity_list.get(finalX).getAmount());
+                                                tv_amount.setText("RM " + subActivity_list.get(finalX).getAmount());
 
                                                 TextView tv_username = new TextView(getActivity());
                                                 tv_username.setId(tv.generateViewId());
@@ -207,7 +191,7 @@ public class HomeFragment  extends Fragment {
                                                 tv_date.setId(tv.generateViewId());
                                                 tv_date.setHeight(100);
                                                 tv_date.setTextColor(Color.BLACK);
-                                                if(subActivity_list.get(finalX).getCreatedDate() !=null){
+                                                if (subActivity_list.get(finalX).getCreatedDate() != null) {
                                                     tv_date.setText(formatter.format(subActivity_list.get(finalX).getCreatedDate()));
                                                 }
                                                 ll_h.addView(tv);
@@ -220,15 +204,14 @@ public class HomeFragment  extends Fragment {
                                     }
 
 
-                                    if(subActivity_list.get(x).getPayerId().matches(userInfo.getUid())){
+                                    if (subActivity_list.get(x).getPayerId().matches(userInfo.getUid())) {
                                         db = FirebaseFirestore.getInstance();
-                                        DocumentReference documentReference =db.collection("Users").document(subActivity_list.get(x).getOwnerId());
+                                        DocumentReference documentReference = db.collection("Users").document(subActivity_list.get(x).getOwnerId());
                                         int finalJ1 = j;
                                         int finalX1 = x;
                                         documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                             @Override
                                             public void onSuccess(DocumentSnapshot documentSnapshot) {
-
 
 
                                                 User user = documentSnapshot.toObject(User.class);
@@ -258,14 +241,14 @@ public class HomeFragment  extends Fragment {
                                                 tv_amount.setWidth(250);
                                                 tv_amount.setTextSize(22);
                                                 tv_amount.setTextColor(Color.GREEN);
-                                                tv_amount.setText("RM "+subActivity_list.get(finalX1).getAmount());
+                                                tv_amount.setText("RM " + subActivity_list.get(finalX1).getAmount());
 
                                                 TextView tv_date = new TextView(getActivity());
                                                 tv_date.setId(tv.generateViewId());
                                                 tv_date.setHeight(100);
                                                 tv_date.setTextColor(Color.BLACK);
 
-                                                if(subActivity_list.get(finalX1).getCreatedDate() !=null){
+                                                if (subActivity_list.get(finalX1).getCreatedDate() != null) {
                                                     tv_date.setText(formatter.format(subActivity_list.get(finalX1).getCreatedDate()));
                                                 }
 
@@ -285,10 +268,10 @@ public class HomeFragment  extends Fragment {
                         }
 
                     });   //End get all sub activity
-                }else{
+                } else {
                     pb.setVisibility(View.INVISIBLE);
                     getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                    GeneralHelper.showMessage(getActivity(),"You have not expenses yet.");
+                    GeneralHelper.showMessage(getActivity(), "You have not expenses yet.");
                 }
             }
         });//End get user overall amount

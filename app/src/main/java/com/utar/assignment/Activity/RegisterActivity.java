@@ -1,8 +1,5 @@
 package com.utar.assignment.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -11,7 +8,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -22,9 +21,6 @@ import com.utar.assignment.R;
 import com.utar.assignment.Util.FirebaseCallback;
 import com.utar.assignment.Util.FirestoreHelper;
 import com.utar.assignment.Util.GeneralHelper;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -49,7 +45,6 @@ public class RegisterActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.register_pb);
 
         fAuth = FirebaseAuth.getInstance();
-
 
 
         setListenerToBtnRegister();
@@ -77,33 +72,33 @@ public class RegisterActivity extends AppCompatActivity {
 
                 boolean check = true;
 
-                if(TextUtils.isEmpty(name)) {
+                if (TextUtils.isEmpty(name)) {
                     txtName.setError("Name is required.");
                     check = false;
                 }
 
-                if(TextUtils.isEmpty(email)) {
+                if (TextUtils.isEmpty(email)) {
                     txtEmail.setError("Email is required.");
                     check = false;
                 }
 
-                if(TextUtils.isEmpty(password)) {
+                if (TextUtils.isEmpty(password)) {
                     txtPassword.setError("Password is required.");
                     check = false;
                 }
 
-                if(TextUtils.isEmpty(password2)) {
+                if (TextUtils.isEmpty(password2)) {
                     txtPasswordRepeat.setError("Repeat password is required.");
                     check = false;
                 }
 
-                if(!password.equals(password2)) {
+                if (!password.equals(password2)) {
                     txtPassword.setError("Password does not match.");
                     txtPasswordRepeat.setError("Password does not match.");
                     check = false;
                 }
 
-                if(!check)
+                if (!check)
                     return;
 
                 progressBar.setVisibility(View.VISIBLE);
@@ -112,7 +107,7 @@ public class RegisterActivity extends AppCompatActivity {
                 fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()) {
+                        if (task.isSuccessful()) {
                             String userId = fAuth.getCurrentUser().getUid();
                             User user = new User(userId, name, email);
 
