@@ -9,31 +9,28 @@
         android:roundIcon="@mipmap/ic_split_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.Assignment">
+
         <activity android:name=".SplashActivity"
             android:theme="@style/SplashStyle"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".Activity.sub_activity" />
         <activity android:name=".Activity.splitActivity" />
         <activity android:name=".Activity.GroupMember" />
-        <activity
-            android:name=".Activity.AddExpenses"
-            android:noHistory="true" />
+        <activity android:name=".Activity.AddExpenses" android:noHistory="true" />
         <activity android:name=".Activity.new_member_group" />
         <activity android:name=".Activity.AddFriend" />
         <activity android:name=".Activity.specified_group" />
         <activity android:name=".Activity.settleBill" />
-        <activity
-            android:name=".Activity.LoginActivity"
-            android:noHistory="true">
-        </activity>
+        <activity android:name=".Activity.LoginActivity" android:noHistory="true"/>
         <activity android:name=".Activity.RegisterActivity" />
         <activity android:name=".Activity.MainActivity" />
+
     </application>
 
 </manifest>

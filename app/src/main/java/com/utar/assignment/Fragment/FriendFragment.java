@@ -4,14 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,9 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.utar.assignment.Activity.AddFriend;
-import com.utar.assignment.Activity.MainActivity;
 import com.utar.assignment.Model.Amount;
 import com.utar.assignment.Model.User;
 import com.utar.assignment.R;
@@ -57,9 +51,7 @@ public class FriendFragment extends Fragment {
     TextView username;
     TextView friendNo;
     List<String> userList = new ArrayList<>();
-    List<String> friendID = new ArrayList<>();
     View view;
-    ListView listView;
     Iterator<Amount> ownerIterator;
 
 
@@ -70,7 +62,6 @@ public class FriendFragment extends Fragment {
 
         username = view.findViewById(R.id.friend_frag_uname);
         friendNo = view.findViewById(R.id.friend_no);
-
 
         FirebaseUser user;
         user = Auth.getInstance().getCurrentUser();
@@ -139,7 +130,6 @@ public class FriendFragment extends Fragment {
 
                 if (!ownerIterator.hasNext()) {
                     initializeRecycleView(null, amountList, userList, uid, amountListOwner, listOwnerUsername, getActivity());
-                    //GeneralHelper.showMessage(getContext(),listOwnerUsername.get(finalI));
                 } else {
                     getOwnerName(ownerIterator.next());
                 }

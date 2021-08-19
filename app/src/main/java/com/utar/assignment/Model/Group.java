@@ -11,11 +11,13 @@ public class Group {
     private String ownerId;
     private List<MainActivity> mainActivityList;
 
-    public Group() {this.Id = UUID.randomUUID().toString();
+    public Group() {
+        this.Id = UUID.randomUUID().toString();
     }
+
     public Group(String groupName) {
         this.Id = UUID.randomUUID().toString();
-    this.groupName=groupName;
+        this.groupName = groupName;
     }
 
     public String getId() {

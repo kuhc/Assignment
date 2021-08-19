@@ -45,16 +45,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNav = findViewById(R.id.bottom_nav);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
-//        if(getIntent().getStringExtra("check")!=null && getIntent().getStringExtra("check").equals("group"))
-//        {
-//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GroupFragment()).commit();
-//
-//        }
-//        else
-//        {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
-        //}
-
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
 
     }
 
@@ -63,45 +54,29 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             Fragment selectedFragment = null;
 
+            selectedFragment = new GroupFragment();
 
+            switch (item.getItemId()) {
+                case R.id.nav_home:
+                    selectedFragment = new HomeFragment();
+                    break;
+                case R.id.nav_group:
+                    selectedFragment = new GroupFragment();
+                    break;
+                case R.id.nav_friend:
+                    selectedFragment = new FriendFragment();
+                    break;
+                case R.id.nav_profile:
+                    selectedFragment = new ProfileFragment();
+                    break;
 
-                selectedFragment = new GroupFragment();
-
-
-                switch (item.getItemId())
-                {
-                    case R.id.nav_home:
-                        selectedFragment = new HomeFragment();
-                        break;
-                    case R.id.nav_group:
-                        selectedFragment = new GroupFragment();
-                        break;
-                    case R.id.nav_friend:
-                        selectedFragment = new FriendFragment();
-                        break;
-                    case R.id.nav_profile:
-                        selectedFragment = new ProfileFragment();
-                        break;
-
-                }
-
-
+            }
 
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
 
             return true;
         }
     };
-
-    //refresh when return back this activity
-    /*@Override
-    protected void onRestart() {
-        super.onRestart();
-        finish();
-        overridePendingTransition(0, 0);
-        startActivity(getIntent());
-        overridePendingTransition(0, 0);
-    }*/
 
     private void HmsPushKit() {
         FirestoreHelper.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new FirebaseCallback() {
@@ -110,12 +85,11 @@ public class MainActivity extends AppCompatActivity {
                 user = (User) object;
 
                 // Check User Token
-                if(user.getPushToken() == null || user.getPushToken().isEmpty()) {
+                if (user.getPushToken() == null || user.getPushToken().isEmpty()) {
                     GeneralHelper.getToken(getApplicationContext(), user);
                 }
             }
         });
     }
-
 
 }

@@ -1,11 +1,5 @@
 package com.utar.assignment.Fragment;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -21,11 +15,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.utar.assignment.Activity.AddExpenses;
-import com.utar.assignment.R;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+
 import com.utar.assignment.Util.SplitCalHelper;
 
 import java.util.ArrayList;
@@ -44,14 +39,14 @@ public class Adjustment_Add_Fragment extends Fragment {
 
         Intent intent = getActivity().getIntent();
         int temp_i = 0;
-        while (intent.hasExtra("users" + temp_i)){
+        while (intent.hasExtra("users" + temp_i)) {
             String temp = intent.getStringExtra("users" + temp_i);
             split_user_list.add(temp);
             temp_i++;
         }
 
-        int temp_j= 0;
-        while (intent.hasExtra("usersid" + temp_j)){
+        int temp_j = 0;
+        while (intent.hasExtra("usersid" + temp_j)) {
             String temp = intent.getStringExtra("usersid" + temp_j);
             split_userid_list.add(temp);
             temp_j++;
@@ -59,10 +54,9 @@ public class Adjustment_Add_Fragment extends Fragment {
 
 
         int split_user = split_user_list.size();
-        double amount = Double.parseDouble(intent.getStringExtra("amount"));;
+        double amount = Double.parseDouble(intent.getStringExtra("amount"));
 
-
-        LinearLayout ll = new LinearLayout (getActivity());
+        LinearLayout ll = new LinearLayout(getActivity());
         ll.setOrientation(LinearLayout.VERTICAL);
 
         ArrayList<EditText> list = new ArrayList<>();
@@ -72,7 +66,7 @@ public class Adjustment_Add_Fragment extends Fragment {
         btn_split.setText("Split By Adjusted");
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         params.weight = 0f;
-        params.setMargins(50,50,50,50);
+        params.setMargins(50, 50, 50, 50);
         params.gravity = Gravity.RIGHT;
         btn_split.setLayoutParams(params);
         btn_split.setEnabled(false);
@@ -85,14 +79,14 @@ public class Adjustment_Add_Fragment extends Fragment {
         result.setTextSize(20);
         result.setGravity(Gravity.CENTER);
         result.setBackgroundColor(Color.LTGRAY);
-        result.setText("Key in the adjustment in RM"+amount);
+        result.setText("Key in the adjustment in RM" + amount);
         ll.addView(result);
 
 
-        for(int i = 0 ; i<split_user ; i++){
+        for (int i = 0; i < split_user; i++) {
 
-            int id_generate = 100+i;
-            LinearLayout ll_hori = new LinearLayout (getActivity());
+            int id_generate = 100 + i;
+            LinearLayout ll_hori = new LinearLayout(getActivity());
             ll_hori.setOrientation(LinearLayout.HORIZONTAL);
 
             TextView tv = new TextView(getActivity());
@@ -116,7 +110,6 @@ public class Adjustment_Add_Fragment extends Fragment {
             ll_hori.addView(tv_pay);
             tv_pay.setLayoutParams(tvLayoutParams);
 
-
             EditText editText = new EditText(getActivity());
             editText.setId(id_generate);
             editText.setTextSize(15);
@@ -127,16 +120,18 @@ public class Adjustment_Add_Fragment extends Fragment {
 
             editText.addTextChangedListener(new TextWatcher() {
 
-                public void afterTextChanged(Editable s) { }
+                public void afterTextChanged(Editable s) {
+                }
 
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
 
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     String str = editText.getText().toString();
                     double parse_amount;
 
                     //check the decimal point
-                    if (!str.isEmpty()){
+                    if (!str.isEmpty()) {
                         String str2 = PerfectDecimal(str, 3, 2);
                         if (!str2.equals(str)) {
                             editText.setText(str2);
@@ -145,23 +140,23 @@ public class Adjustment_Add_Fragment extends Fragment {
 
                     }
 
-                    if(str.matches("")
-                            ||str.contains("-")
-                            ||str.contains("\\")
-                            ||str.contains("*")
-                            ||str.contains("+")
-                            ||str.contains("_")
-                    ){
+                    if (str.matches("")
+                            || str.contains("-")
+                            || str.contains("\\")
+                            || str.contains("*")
+                            || str.contains("+")
+                            || str.contains("_")
+                    ) {
                         parse_amount = 0;
-                    }else{
+                    } else {
                         parse_amount = Double.parseDouble(str);
                     }
 
-                    if(parse_amount > amount){
+                    if (parse_amount > amount) {
                         editText.setText(Double.toString(amount));
                     }
 
-                    adjustment_split(list ,tv_list,amount);
+                    adjustment_split(list, tv_list, amount);
 
                 }
 
@@ -179,10 +174,10 @@ public class Adjustment_Add_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                ArrayList<Double> amount_list = adjustment_split_result(list,amount);
+                ArrayList<Double> amount_list = adjustment_split_result(list, amount);
                 SplitCalHelper sh = new SplitCalHelper();
-                sh.create_main_activity(getActivity(),split_userid_list,amount_list,intent.getStringExtra("name"),
-                        intent.getStringExtra("group"),amount);
+                sh.create_main_activity(getActivity(), split_userid_list, amount_list, intent.getStringExtra("name"),
+                        intent.getStringExtra("group"), amount);
 
                 getActivity().finish();
             }
@@ -190,40 +185,37 @@ public class Adjustment_Add_Fragment extends Fragment {
 
 
         ll.addView(btn_split);
-        //setContentView(ll);
-
-
         return ll;
     }
 
-    public void adjustment_split(ArrayList<EditText> list, ArrayList<TextView> tv_list, double amounts){
+    public void adjustment_split(ArrayList<EditText> list, ArrayList<TextView> tv_list, double amounts) {
 
         double temp_split = amounts / list.size();
         double[] adjusted_amount = new double[list.size()];
         double total_split = 0;
 
-        for(int i = 0; i <list.size(); i++) {
+        for (int i = 0; i < list.size(); i++) {
             adjusted_amount[i] = temp_split;
         }
 
-        for(int i = 0; i <list.size(); i++){
+        for (int i = 0; i < list.size(); i++) {
             double temp = 0;
             String et = list.get(i).getText().toString();
-            if(et.matches("")
-                    ||et.contains("-")
-                    ||et.contains("\\")
-                    ||et.contains("*")
-                    ||et.contains("+")
-                    ||et.contains("_")
-            ){
+            if (et.matches("")
+                    || et.contains("-")
+                    || et.contains("\\")
+                    || et.contains("*")
+                    || et.contains("+")
+                    || et.contains("_")
+            ) {
 
-            }else{
+            } else {
                 temp = Double.parseDouble(list.get(i).getText().toString());
                 adjusted_amount[i] = adjusted_amount[i] + temp;
             }
 
-            for(int j = 0 ; j <list.size();j++){
-                adjusted_amount[j] = adjusted_amount[j]-(temp/list.size());
+            for (int j = 0; j < list.size(); j++) {
+                adjusted_amount[j] = adjusted_amount[j] - (temp / list.size());
                 adjusted_amount[j] = Math.round(adjusted_amount[j] * 100.0) / 100.0;
             }
 
@@ -231,84 +223,83 @@ public class Adjustment_Add_Fragment extends Fragment {
 
 
         //if the total split is not split out complete, add to first one 0.1
-        for(int i = 0; i <list.size(); i++){
+        for (int i = 0; i < list.size(); i++) {
             total_split = total_split + adjusted_amount[i];
         }
-        if(total_split < amounts){
+        if (total_split < amounts) {
             adjusted_amount[0] = adjusted_amount[0] + (amounts - total_split);
             adjusted_amount[0] = Math.round(adjusted_amount[0] * 100.0) / 100.0;
         }
-        if(total_split > amounts){
+        if (total_split > amounts) {
             adjusted_amount[0] = adjusted_amount[0] - (amounts - total_split);
             adjusted_amount[0] = Math.round(adjusted_amount[0] * 100.0) / 100.0;
         }
 
-        for(int i = 0; i <list.size(); i++){
-           if(adjusted_amount[i]<0){
-               btn_split.setEnabled(false);
-               break;
-           }else{
-               btn_split.setEnabled(true);
-           }
+        for (int i = 0; i < list.size(); i++) {
+            if (adjusted_amount[i] < 0) {
+                btn_split.setEnabled(false);
+                break;
+            } else {
+                btn_split.setEnabled(true);
+            }
         }
 
-        for(int i = 0; i <list.size(); i++){
-            tv_list.get(i).setText("RM"+adjusted_amount[i]);
+        for (int i = 0; i < list.size(); i++) {
+            tv_list.get(i).setText("RM" + adjusted_amount[i]);
         }
 
 
     }
 
 
-    public ArrayList<Double> adjustment_split_result(ArrayList<EditText> adjust_list,double amount){
+    public ArrayList<Double> adjustment_split_result(ArrayList<EditText> adjust_list, double amount) {
 
         ArrayList<Double> result_list = new ArrayList<>();
         double temp_split = amount / adjust_list.size();
         double[] adjusted_amount = new double[adjust_list.size()];
         double total_split = 0;
 
-        for(int i = 0; i <adjust_list.size(); i++) {
+        for (int i = 0; i < adjust_list.size(); i++) {
             adjusted_amount[i] = temp_split;
         }
 
-        for(int i = 0; i <adjust_list.size(); i++){
+        for (int i = 0; i < adjust_list.size(); i++) {
             double temp = 0;
             String et = adjust_list.get(i).getText().toString();
-            if(et.matches("")
-                    ||et.contains("-")
-                    ||et.contains("\\")
-                    ||et.contains("*")
-                    ||et.contains("+")
-            ){
+            if (et.matches("")
+                    || et.contains("-")
+                    || et.contains("\\")
+                    || et.contains("*")
+                    || et.contains("+")
+            ) {
 
-            }else{
+            } else {
                 temp = Double.parseDouble(adjust_list.get(i).getText().toString());
                 adjusted_amount[i] = adjusted_amount[i] + temp;
             }
 
-            for(int j = 0 ; j <adjust_list.size();j++){
-                adjusted_amount[j] = adjusted_amount[j]-(temp/adjust_list.size());
+            for (int j = 0; j < adjust_list.size(); j++) {
+                adjusted_amount[j] = adjusted_amount[j] - (temp / adjust_list.size());
                 adjusted_amount[j] = Math.round(adjusted_amount[j] * 100.0) / 100.0;
             }
         }
 
         //if the total split is not split out complete, add to first one 0.1
-        for(int i = 0; i <adjust_list.size(); i++){
+        for (int i = 0; i < adjust_list.size(); i++) {
             total_split = total_split + adjusted_amount[i];
         }
-        if(total_split < amount){
+        if (total_split < amount) {
             adjusted_amount[0] = adjusted_amount[0] + (amount - total_split);
             adjusted_amount[0] = Math.round(adjusted_amount[0] * 100.0) / 100.0;
         }
-        if(total_split > amount){
+        if (total_split > amount) {
             adjusted_amount[0] = adjusted_amount[0] - (amount - total_split);
             adjusted_amount[0] = Math.round(adjusted_amount[0] * 100.0) / 100.0;
         }
 
-        for(int i = 0; i <adjust_list.size(); i++){
+        for (int i = 0; i < adjust_list.size(); i++) {
             result_list.add(adjusted_amount[i]);
         }
-
 
         return result_list;
     }
@@ -339,7 +330,5 @@ public class Adjustment_Add_Fragment extends Fragment {
         }
         return rFinal;
     }
-
-
 
 }

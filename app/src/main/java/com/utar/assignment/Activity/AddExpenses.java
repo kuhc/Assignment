@@ -1,8 +1,5 @@
 package com.utar.assignment.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -10,11 +7,13 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -41,20 +40,18 @@ import com.utar.assignment.Util.SplitCalHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 public class AddExpenses extends AppCompatActivity {
 
-    private Button btn_split,btn_cancel,btn_split_unequally;
+    private Button btn_split, btn_cancel, btn_split_unequally;
     private ChipGroup chipGroup;
     private TextView result;
-    private int split_user_count =0;
-    private double temp_result=0;
-    private EditText amount,expenses_name;
-    //private AutoCompleteTextView user_share;
+    private int split_user_count = 0;
+    private double temp_result = 0;
+    private EditText amount, expenses_name;
     private Spinner groups;
     SplitCalHelper sh = new SplitCalHelper();
 
@@ -66,13 +63,13 @@ public class AddExpenses extends AppCompatActivity {
     //model
     private com.utar.assignment.Model.MainActivity mainactivity;
     private SubActivity subactivity;
-    private  Group cur_group;
+    private Group cur_group;
     private User userInfo;
 
+    //firebase
     private static FirebaseFirestore fStore = FirebaseFirestore.getInstance();
     private FirebaseAuth Auth;
     FirebaseFirestore db;
-
 
 
     @Override
@@ -81,10 +78,7 @@ public class AddExpenses extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_expenses);
 
-        //btn_adduser = findViewById(R.id.add_adduser);
-        //user_share = findViewById(R.id.add_usershare);
         btn_split_unequally = findViewById(R.id.add_split_unequally);
-
         btn_split = findViewById(R.id.add_split);
         btn_cancel = findViewById(R.id.add_cancel);
         chipGroup = findViewById(R.id.add_chipGroup);
@@ -100,7 +94,7 @@ public class AddExpenses extends AppCompatActivity {
         String uid = user.getUid();
 
         db = FirebaseFirestore.getInstance();
-        DocumentReference documentReference =db.collection("Users").document(uid);
+        DocumentReference documentReference = db.collection("Users").document(uid);
         documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -108,19 +102,19 @@ public class AddExpenses extends AppCompatActivity {
 
                 //group list
                 CollectionReference groupRef = db.collection("Group_1");
-                if(userInfo.getGroupList()!=null) {
+                if (userInfo.getGroupList() != null) {
                     groupRef.whereIn("groupId", userInfo.getGroupList()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            group=task.getResult().toObjects(Group.class);
+                            group = task.getResult().toObjects(Group.class);
 
                             List<String> supplierNames = new ArrayList<>();
-                            for(int i = 0; i<group.size();i++){
+                            for (int i = 0; i < group.size(); i++) {
                                 supplierNames.add(group.get(i).getGroupName());
                             }
 
                             ArrayAdapter<String> grouplist = new ArrayAdapter<String>
-                                    (AddExpenses.this, android.R.layout.simple_list_item_1,supplierNames);
+                                    (AddExpenses.this, android.R.layout.simple_list_item_1, supplierNames);
                             grouplist.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                             groups.setAdapter(grouplist);
 
@@ -136,17 +130,19 @@ public class AddExpenses extends AppCompatActivity {
         //amount has been type
         amount.addTextChangedListener(new TextWatcher() {
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
 
             @Override
             public void beforeTextChanged(CharSequence s, int start,
                                           int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //check the decimal point
                 String str = amount.getText().toString();
-                if (!str.isEmpty()){
+                if (!str.isEmpty()) {
                     String str2 = PerfectDecimal(str, 3, 2);
                     if (!str2.equals(str)) {
                         amount.setText(str2);
@@ -158,23 +154,22 @@ public class AddExpenses extends AppCompatActivity {
         });
 
 
-
         //ready to split
         btn_split.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if(btn_enable_check()){
+                if (btn_enable_check()) {
                     double amounts = 0;
-                    String text =amount.getText().toString();
-                    if(text.matches("")){
-                        amounts=0;
-                    }else{
+                    String text = amount.getText().toString();
+                    if (text.matches("")) {
+                        amounts = 0;
+                    } else {
                         amounts = Double.parseDouble(text);
                     }
 
                     split_user_count = chipGroup.getChildCount();
-                    temp_result = sh.splitNormal(split_user_count,amounts);
+                    temp_result = sh.splitNormal(split_user_count, amounts);
 
                     spinner_listener();
 
@@ -184,10 +179,10 @@ public class AddExpenses extends AppCompatActivity {
                         split_user_list.add(user);
                     }
 
-                    split_to_database(split_user_list,temp_result);
+                    split_to_database(split_user_list, temp_result);
 
-                }else{
-                    GeneralHelper.showMessage(AddExpenses.this,"Please fill in both Amount or Expenses");
+                } else {
+                    GeneralHelper.showMessage(AddExpenses.this, "Please fill in both Amount or Expenses");
                 }
 
             }
@@ -197,7 +192,7 @@ public class AddExpenses extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(btn_enable_check()) {
+                if (btn_enable_check()) {
 
                     ArrayList<String> split_user_list = new ArrayList<>();
                     for (int i = 0; i < chipGroup.getChildCount(); i++) {
@@ -215,7 +210,7 @@ public class AddExpenses extends AppCompatActivity {
                     }
 
                     ArrayList<String> split_userid_list = find_user_id(split_user_list);
-                    split_userid_list.add(0,userInfo.getUid());
+                    split_userid_list.add(0, userInfo.getUid());
                     //insert userid
                     for (int i = 0; i < split_userid_list.size(); i++) {
                         String temp_user = split_userid_list.get(i);
@@ -226,9 +221,8 @@ public class AddExpenses extends AppCompatActivity {
                     intent.putExtra("group", cur_group.getGroupId());
                     startActivity(intent);
                     finish();
-                }
-                else{
-                    GeneralHelper.showMessage(AddExpenses.this,"Please fill in both Amount or Expenses");
+                } else {
+                    GeneralHelper.showMessage(AddExpenses.this, "Please fill in both Amount or Expenses");
                 }
 
             }
@@ -245,51 +239,50 @@ public class AddExpenses extends AppCompatActivity {
     }
 
 
-
     //function to calculate the split amount
-    public void cal_temp_result(){
+    public void cal_temp_result() {
 
         double amounts = 0;
-        String text =amount.getText().toString();
+        String text = amount.getText().toString();
 
-        if(text.matches("")
-                ||text.contains("-")
-                ||text.contains("\\")
-                ||text.contains("*")
-                ||text.contains("+")
-                ||text.contains("_")
-        ){
-            amounts=0;
-        }else{
+        if (text.matches("")
+                || text.contains("-")
+                || text.contains("\\")
+                || text.contains("*")
+                || text.contains("+")
+                || text.contains("_")
+        ) {
+            amounts = 0;
+        } else {
             amounts = Double.parseDouble(text);
         }
         split_user_count = chipGroup.getChildCount();
-        temp_result = sh.splitNormal(split_user_count,amounts);
+        temp_result = sh.splitNormal(split_user_count, amounts);
         temp_result = Math.round(temp_result * 100.0) / 100.0;
 
         result.setText("Split: RM" + temp_result);
     }
 
 
-    //save amount to
-    public void split_to_database(ArrayList<String> Temp_userlist, double split_amount){
+    //save amount to firebase
+    public void split_to_database(ArrayList<String> Temp_userlist, double split_amount) {
 
         Date date = new Date();
         String str_date = new SimpleDateFormat("yyyy-MM-dd").format(date);
-        ArrayList<String> splituser_id_list =  find_user_id(Temp_userlist);
-        splituser_id_list.add(0,userInfo.getUid());
+        ArrayList<String> splituser_id_list = find_user_id(Temp_userlist);
+        splituser_id_list.add(0, userInfo.getUid());
 
         ArrayList<Double> split_amount_list = new ArrayList<>();
 
-        for(int i = 0; i<splituser_id_list.size();i++){
+        for (int i = 0; i < splituser_id_list.size(); i++) {
             split_amount_list.add(split_amount);
         }
 
-        sh.update_amount_list(splituser_id_list,split_amount_list,AddExpenses.this);
+        sh.update_amount_list(splituser_id_list, split_amount_list, AddExpenses.this);
 
         mainactivity = new com.utar.assignment.Model.MainActivity();
-        
-        for (int i = 1 ; i<Temp_userlist.size() ; i++){
+
+        for (int i = 1; i < Temp_userlist.size(); i++) {
             subactivity = new SubActivity();
             subactivity.setPayerId(splituser_id_list.get(0));
             subactivity.setOwnerId(splituser_id_list.get(i));
@@ -303,15 +296,15 @@ public class AddExpenses extends AppCompatActivity {
         mainactivity.setCreatedDate(str_date);
 
         double amounts;
-        String temp_amount =amount.getText().toString();
-        if(temp_amount.matches("")){
-            amounts=0;
-        }else{
+        String temp_amount = amount.getText().toString();
+        if (temp_amount.matches("")) {
+            amounts = 0;
+        } else {
             amounts = Double.parseDouble(temp_amount);
         }
         mainactivity.setBillAmount(amounts);
 
-        if(cur_group.getMainActivityList() == null){
+        if (cur_group.getMainActivityList() == null) {
             cur_group.setMainActivityList(new ArrayList<MainActivity>());
         }
 
@@ -329,18 +322,18 @@ public class AddExpenses extends AppCompatActivity {
 
 
     //add user for split
-    public void add_user_chip(View view,String name){
+    public void add_user_chip(View view, String name) {
 
         Chip chip = new Chip(this);
 
-        ChipDrawable drawable = ChipDrawable.createFromAttributes(this,null
-                ,0,R.style.Widget_MaterialComponents_Chip_Entry);
+        ChipDrawable drawable = ChipDrawable.createFromAttributes(this, null
+                , 0, R.style.Widget_MaterialComponents_Chip_Entry);
         chip.setChipDrawable(drawable);
         chip.setCheckable(false);
         chip.setClickable(false);
         chip.setChipIconResource(R.drawable.ic_user);
         chip.setIconStartPadding(3f);
-        chip.setPadding(60,10,60,10);
+        chip.setPadding(60, 10, 60, 10);
         chip.setText(name);
         chip.setOnCloseIconClickListener(new View.OnClickListener() {
             @Override
@@ -354,13 +347,14 @@ public class AddExpenses extends AppCompatActivity {
         cal_temp_result();
     }
 
-    public ArrayList<String> find_user_id(ArrayList<String> Temp_userlist){
+
+    public ArrayList<String> find_user_id(ArrayList<String> Temp_userlist) {
 
         ArrayList<String> splituser_id_list = new ArrayList<>();
 
-        for(int i = 0 ; i<Temp_userlist.size() ; i++){
-            for(int j = 0 ; j < userList.size() ; j++){
-                if(Temp_userlist.get(i).matches(userList.get(j).getUsername())){
+        for (int i = 0; i < Temp_userlist.size(); i++) {
+            for (int j = 0; j < userList.size(); j++) {
+                if (Temp_userlist.get(i).matches(userList.get(j).getUsername())) {
                     splituser_id_list.add(userList.get(j).getUid());
                     break;
                 }
@@ -370,13 +364,13 @@ public class AddExpenses extends AppCompatActivity {
     }
 
 
-    public void spinner_listener(){
+    public void spinner_listener() {
         groups.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 cur_group = group.get(position);
-                db.collection("Users").whereArrayContains("groupList",group.get(position).getGroupId())
+                db.collection("Users").whereArrayContains("groupList", group.get(position).getGroupId())
                         .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -385,26 +379,26 @@ public class AddExpenses extends AppCompatActivity {
 
                         //default user in chips group "You"
                         Chip default_chip = new Chip(AddExpenses.this);
-                        ChipDrawable drawable = ChipDrawable.createFromAttributes(AddExpenses.this,null
-                                ,0,R.style.Widget_MaterialComponents_Chip_Filter);
+                        ChipDrawable drawable = ChipDrawable.createFromAttributes(AddExpenses.this, null
+                                , 0, R.style.Widget_MaterialComponents_Chip_Filter);
                         default_chip.setChipDrawable(drawable);
                         default_chip.setCheckable(false);
                         default_chip.setClickable(false);
                         default_chip.setChipIconResource(R.drawable.ic_user);
                         default_chip.setIconStartPadding(3f);
-                        default_chip.setPadding(60,10,60,10);
+                        default_chip.setPadding(60, 10, 60, 10);
                         default_chip.setText("You");
                         chipGroup.addView(default_chip);
 
                         userList = task.getResult().toObjects(User.class);
 
-                        for (int i = 0 ; i < userList.size(); i++){
+                        for (int i = 0; i < userList.size(); i++) {
 
-                            if(userList.get(i).getUsername().matches(userInfo.getUsername())){
+                            if (userList.get(i).getUsername().matches(userInfo.getUsername())) {
                                 continue;
                             }
 
-                            add_user_chip(view,userList.get(i).getUsername());
+                            add_user_chip(view, userList.get(i).getUsername());
                         }
 
                     }
@@ -412,17 +406,18 @@ public class AddExpenses extends AppCompatActivity {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) { }
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
     }
 
-    public boolean btn_enable_check(){
+    public boolean btn_enable_check() {
 
-        String temp1,temp2;
+        String temp1, temp2;
         temp1 = amount.getText().toString();
         temp2 = expenses_name.getText().toString();
 
-        if (temp1.matches("")||temp2.matches("")) {
+        if (temp1.matches("") || temp2.matches("")) {
 
             return false;
         }
@@ -455,8 +450,5 @@ public class AddExpenses extends AppCompatActivity {
         }
         return rFinal;
     }
-
-
-
 
 }

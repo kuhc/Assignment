@@ -41,7 +41,7 @@ public class Amount {
     }
 
     public void updateAmount(double temp_amount) {
-        this.amount= amount + temp_amount;
+        this.amount = amount + temp_amount;
     }
 
     public void setAmount(double amount) {
