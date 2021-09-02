@@ -16,6 +16,7 @@ The app does use third party services that may collect information used to ident
 
 Link to privacy policy of third party service providers used by the app
 
+*   [Huawei Mobile Services](https://developer.huawei.com/consumer/en/policy-center/)
 *   [Google Play Services](https://www.google.com/policies/privacy/)
 
 **Log Data**
